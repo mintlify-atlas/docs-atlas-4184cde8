@@ -1,5 +1,5 @@
 ---
-title: "Install SickoMenu on Windows, Linux, and macOS"
+title: "How to Install SickoMenu on Windows, Linux, and macOS"
 sidebarTitle: "Installation"
 description: "How to install SickoMenu on Windows, Linux via Proton/Wine, and macOS via CrossOver or Wine, using version.dll proxy or a DLL injector."
 ---
@@ -144,7 +144,43 @@ Installing SickoMenu requires placing the correct DLL file into your Among Us ga
       </Step>
     </Steps>
 
-    ### Method 3: Wine via Homebrew (Terminal)
+    ### Method 2: PlayOnMac
+
+    <Note>
+      macOS Catalina and later (≥10.15) lack 32-bit support. If you encounter issues, install **Wine-Staging** via Homebrew for better compatibility: `brew install --cask wine-staging`.
+    </Note>
+
+    <Steps>
+      <Step title="Download and install PlayOnMac">
+        Download [PlayOnMac](https://www.playonmac.com) and install it.
+      </Step>
+      <Step title="Create a virtual drive for Among Us">
+        Open PlayOnMac and click **Install**. Search for "Among Us" (even if not listed) and select **Install a non-listed program**. Name the virtual drive (e.g., "Among Us Modded") and ensure it is set to **32-bit architecture**.
+      </Step>
+      <Step title="Install Steam in the virtual drive">
+        Download the Steam installer from [store.steampowered.com](https://store.steampowered.com/about/). In PlayOnMac's installation wizard, select **Install components directly** → **Steam**, then follow the prompts to install Steam in the virtual drive.
+      </Step>
+      <Step title="Install Among Us via Steam">
+        Launch Steam from PlayOnMac, log in, and install Among Us.
+      </Step>
+      <Step title="Place version.dll">
+        Right-click your virtual drive in PlayOnMac → **Open virtual drive's directory**. Navigate to:
+
+        ```text
+        drive_c/Program Files (x86)/Steam/steamapps/common/Among Us
+        ```
+
+        Place the `version.dll` file here.
+      </Step>
+      <Step title="Add the DLL override">
+        In PlayOnMac, select your virtual drive → **Configure** → **Wine** → **Libraries**. Add `version` to the overrides and set it to **Native (Windows)**.
+      </Step>
+      <Step title="Launch the game">
+        Run Among Us through Steam in PlayOnMac. Use **Fn+Backspace** or **Command+Backspace** to toggle SickoMenu, depending on your Mac model.
+      </Step>
+    </Steps>
+
+    ### Method 3: Wine via Homebrew (Terminal, Recommended)
 
     This method is recommended for users comfortable with the terminal. It creates a dedicated Wine prefix to keep Among Us isolated.
 
@@ -199,6 +235,39 @@ Installing SickoMenu requires placing the correct DLL file into your Among Us ga
       </Step>
       <Step title="Launch the game">
         Start Steam from Terminal (Step 4 command), then launch Among Us from your Steam library. Use **Command+Backspace** or **Fn+Backspace** to toggle SickoMenu, depending on your Mac model.
+      </Step>
+    </Steps>
+
+    ### Method 4: Whisky + Apple Game Porting Toolkit (Apple Silicon)
+
+    <Note>
+      This method uses **Whisky** with **Apple's Game Porting Toolkit**. It is best suited for **Apple Silicon (M1/M2/M3)** Macs running **macOS Ventura (13+)** and is completely separate from CrossOver, PlayOnMac, and manual Wine prefixes.
+    </Note>
+
+    <Steps>
+      <Step title="Install Whisky">
+        Download and install Whisky from [getwhisky.app](https://getwhisky.app). Drag Whisky into your Applications folder and open it. Allow Whisky to install Wine and the Apple Game Porting Toolkit when prompted.
+      </Step>
+      <Step title="Create a new bottle">
+        Click **+ New Bottle**. Name it (e.g., "Among Us GPTK"), set Windows Version to **Windows 10**, leave architecture at default (64-bit), then click **Create**.
+      </Step>
+      <Step title="Install Steam and Among Us">
+        Select your bottle and click **Run Installer**. Download the Steam installer from [store.steampowered.com](https://store.steampowered.com/about/), select `SteamSetup.exe`, and complete the installation. Launch Steam from Whisky, log in, and install Among Us. Close Steam once installation finishes.
+      </Step>
+      <Step title="Place version.dll">
+        In Whisky, select your bottle and click **Open Bottle in Finder**. Navigate to:
+
+        ```text
+        drive_c/Program Files (x86)/Steam/steamapps/common/Among Us
+        ```
+
+        Place the `version.dll` file into this folder.
+      </Step>
+      <Step title="Add the DLL override">
+        With the bottle selected, open **Bottle Settings** → **Wine Configuration** → **Libraries** tab. Under **New override for library**, type `version`, click **Add**, set it to **Native (Windows)**, then **Apply** → **OK**.
+      </Step>
+      <Step title="Launch the game">
+        Start Steam from Whisky and launch Among Us from your Steam library. Use **Fn+Backspace** or **Command+Backspace** to toggle SickoMenu, depending on your Mac model.
       </Step>
     </Steps>
   </Tab>

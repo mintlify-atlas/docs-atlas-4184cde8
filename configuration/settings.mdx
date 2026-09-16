@@ -1,7 +1,7 @@
 ---
 title: "Settings Tab: General Options, Spoofing, and Account"
 sidebarTitle: "Settings"
-description: "Configure SickoMenu's general behaviour, account spoofing, and named config profiles — all persisted to sicko-config/<name>.json in the Among Us directory."
+description: "Configure SickoMenu's general behaviour, account spoofing, and named config profiles — persisted to sicko-config/<name>.json in the Among Us directory."
 ---
 
 The Settings tab is the central control panel for SickoMenu's global behaviour. Every option you change here is written immediately to `SickoMenu/sicko-config/<name>.json` inside your Among Us installation directory, where `<name>` matches the profile selected in the **Config** field. Multiple named configs are supported, so you can maintain separate profiles for different play styles and switch between them without restarting the game.
@@ -29,7 +29,7 @@ The General sub-section covers quality-of-life toggles, account identity, and a 
 | **RGB Lobby Code** | Animates the lobby code through the full colour spectrum (`RgbLobbyCode`). |
 | **Unlock Cosmetics** | Makes all cosmetic items available in the dressing room without owning them (`UnlockCosmetics`). |
 | **Unlock All Achievements** | Grants every in-game achievement (`unlockAllAchievements`). |
-| **Allow other mod users to see you're using SickoMenu** | Broadcasts a flag over SickoChat so other SickoMenu users can identify you (`BroadcastedMod`). |
+| **Allow other mod users to see you're using SickoMenu** | Broadcasts a flag over SickoChat so other SickoMenu users can identify you (`ModDetection`). |
 
 ## Spoofing
 
@@ -38,7 +38,7 @@ The Spoofing sub-section lets you present a different identity to the Among Us s
 | Option | State Field | Description |
 |---|---|---|
 | **Spoof Guest Account** | `SpoofGuestAccount` | Reports your account to the server as a guest / Quick Chat-only account. |
-| **Use Custom Friend Code** | `SpoofFriendCode` / `NewFriendCode` | Broadcasts a hand-typed friend code instead of your real one. Only functional on new or guest accounts. |
+| **Use Custom Friend Code** | `UseNewFriendCode` / `NewFriendCode` | Broadcasts a hand-typed friend code instead of your real one. Only functional on new or guest accounts. |
 | **Spoof Level** | `SpoofLevel` / `FakeLevel` | Sends an arbitrary XP level to the server and to other players. |
 | **Spoof Platform** | `SpoofPlatform` / `FakePlatform` | Reports your client as running on a different platform (Epic Games, Steam, iOS, Android, Switch, Xbox, PlayStation, etc.). |
 | **Spoof PSN Platform ID** | `SpoofPsnId` / `FakePsnId` | Sends a custom PlayStation Network platform identifier (`uint64`). |
@@ -55,7 +55,7 @@ The Spoofing sub-section lets you present a different identity to the Among Us s
 
 SickoMenu stores all settings in a single flat JSON file at:
 
-```
+```text
 <Among Us install>/SickoMenu/sicko-config/<name>.json
 ```
 

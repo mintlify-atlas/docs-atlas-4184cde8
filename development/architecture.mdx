@@ -16,7 +16,7 @@ SickoMenu is structured into five main layers: **framework** (IL2CPP initialisat
 | `events/` | Observer-style typed event structs derived from `EventInterface`. Hooks emit these events; subsystems such as the replay recorder, ESP overlay, and SMAC anti-cheat scanner subscribe to them. Events include `KillEvent`, `VentEvent`, `WalkEvent`, `CastVoteEvent`, `ReportDeadBodyEvent`, `TaskCompletedEvent`, `CheatDetectedEvent`, `DisconnectEvent`, `ProtectPlayerEvent`, `ShapeShiftEvent`, `SabotageEvent`, `PhantomEvent`, and `ModerationEvent` |
 | `gui/` | ImGui render loop (`Renderer.cpp`, `RenderCmd.cpp`), ESP overlay (`esp.cpp`), radar (`radar.cpp`), replay (`replay.cpp`), theme engine (`theme.cpp`), in-game console (`console.cpp`), and per-tab source files in `gui/tabs/` (About, Debug, Doors, ESP, Game, Host, Players, Radar, Replay, Sabotage, Self, Settings, Tasks) |
 | `user/` | Application-level logic: `state.hpp` / `state.cpp` (the `Settings` class and JSON config persistence), `utility.h` / `utility.cpp` (helper functions, `PlayerSelection`, `GameOptions`, `RoleOptions`), `game.h` / `game.cpp` (game-state accessors), `keybinds.h` / `keybinds.cpp`, `achievements.hpp` / `achievements.cpp`, `profiler.h` / `profiler.cpp`, `logger.h` / `logger.cpp`, `resources.h` / `resources.cpp` |
-| `includes/` | Vendored third-party dependencies: ImGui (`imgui/`), Microsoft Detours (`detours/`), DirectX 11 setup helpers (`directx11.cpp/.h`), `stb_image.h`, `nlohmann/json.hpp`, `crc32` |
+| `includes/` | Vendored third-party dependencies: ImGui (`imgui/`), Microsoft Detours (`detours/`), DirectX 11 setup helpers (`directx11.cpp/.h`), `stb_image.h`, `json.hpp` (nlohmann/json), `crc32.cpp/.h` |
 | `appdata/` | IL2CPP-generated bindings for the current Among Us version: `il2cpp-classes.h`, `il2cpp-functions.h`, `il2cpp-functions.cpp`, `il2cpp-types.h`, `il2cpp-api-functions.h`, `il2cpp-translations.h` |
 
 ## IL2CPP Initialisation Flow
@@ -132,7 +132,7 @@ The **Replay** tab, **ESP** overlay, and **SMAC** subsystem all consume these ev
 The `Settings` class in `user/state.hpp` holds all mod configuration — feature toggles, host presets, cosmetic presets, keybinds, SMAC options, and more. On save, the object is serialised to JSON using **nlohmann/json** and written to:
 
 ```
-<Among Us directory>/sicko-config/<config-name>.json
+<Among Us directory>/SickoMenu/sicko-config/<config-name>.json
 ```
 
 Multiple named config profiles are supported; the active profile is selected in-game. `GetAllConfigs()` and `CheckConfigExists()` in `utility.h` manage profile discovery and validation.

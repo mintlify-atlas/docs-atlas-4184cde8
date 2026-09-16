@@ -1,5 +1,5 @@
 ---
-title: "Game Tab: Lobby Controls, Chat, and Moderation"
+title: "Game Tab: Lobby Controls, Chat, Anticheat, and History"
 sidebarTitle: "Game Tab"
 description: "Manage lobby settings, broadcast chat messages, run host utilities, configure anticheat (SMAC), and review player and lobby history from the Game tab."
 ---
@@ -52,7 +52,7 @@ Tools for composing, broadcasting, and spamming chat messages.
 <Note>
 **SickoChat** is SickoMenu's peer-to-peer chat channel. To use it from within the normal chat box, type:
 
-```
+```text
 /sc <your message>
 ```
 
@@ -103,14 +103,21 @@ SickoMenu Anticheat (SMAC) monitors other players' RPCs and game events for susp
 
 SMAC tracks a wide range of checks including (but not limited to): invalid colors or cosmetics, suspicious chat content, abnormal task-completion rates, illegal role RPCs, improper murder/shapeshift/vanish events, and out-of-range level values.
 
-When a violation is detected, SMAC applies the configured punishment level:
+SMAC uses two separate punishment settings — one for when you are the host, and one for when you are a regular player:
+
+**Host Punishment** (available when you are the lobby host):
 
 - **Do Nothing** — log the event silently
-- **Warn Self** — send a warning to the offending player
-- **Kick** *(host only)* — remove the player from the lobby
-- **Ban** *(host only)* — permanently ban the player from the lobby
+- **Warn Self** — send a warning notification to the offending player
+- **Kick** — remove the player from the lobby
+- **Ban** — permanently ban the player from the lobby
 
-Punishment severity can be configured globally or overridden per detection reason.
+**Regular Punishment** (available to all players):
+
+- **Do Nothing** — log the event silently
+- **Warn Self** — send a warning notification to the offending player
+
+Both punishment levels can be configured globally or overridden per detection reason.
 
 ---
 
@@ -123,4 +130,4 @@ Persistent logs that survive across sessions, letting you look up players or lob
 | **Player History** | A scrollable record of every player you have encountered, storing their name, friend code, PUID, level, platform, and whether they were detected as a modded client. |
 | **Lobby History** | A log of the last lobbies you joined, including the lobby code and host name. |
 
-Player History stores up to **50** entries by default; Lobby History retains the last **20** lobbies. Both logs can be searched and entries can be promoted to the whitelist or blacklist directly from the history view.
+Player History stores up to **100** entries; when full, the oldest entry is removed to make room for new ones. Lobby History stores up to **50** lobbies and displays up to **20** by default (adjustable via the *Lobbies to Show* slider). Both logs can be searched and entries can be promoted to the whitelist or blacklist directly from the history view.

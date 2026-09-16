@@ -23,7 +23,8 @@ Controls that change what you see on screen and how other players see your name 
 | **Show Shadows While Zoomed** | Keeps shadow rendering active even at high zoom levels. |
 | **Always Show Chat Button** | Keeps the chat button visible at all times, regardless of game state. |
 | **Allow Ctrl+C/V in Chat** | Enables clipboard copy and paste shortcuts inside the chat input. |
-| **Read Ghost Messages** | Lets you read messages sent by dead players that are normally hidden from the living. |
+| **Read Messages by Ghosts** | Lets you read messages sent by dead players that are normally hidden from the living. |
+| **Read and Send SickoChat** | Enables receiving and sending messages over the SickoChat peer-to-peer channel. |
 | **Custom Name** | Replaces your displayed name with a custom string. |
 | **Custom Name for Everyone** | Pushes your custom name to all other players' clients. |
 | **Reveal Roles** | Shows every player's actual role next to their name. |
@@ -31,6 +32,8 @@ Controls that change what you see on screen and how other players see your name 
 | **Abbreviate Role Names** | Shortens revealed role labels (e.g., *Eng* for Engineer). |
 | **Player Colored Dots** | Renders a color-coded dot next to each player's name. |
 | **Show Player Info in Lobby** | Displays extended player data (level, platform, friend code) while in the lobby. |
+| **Show Lobby Info** | Shows additional information about the current lobby. |
+| **Hide Whitelisted Players' Info** | Hides extended info for players on your whitelist. |
 | **Reveal Votes** | Shows who voted for whom during meetings. |
 | **Reveal Anonymous Votes** | Unmasks votes cast in Anonymous Voting mode. |
 | **See Ghosts** | Makes dead players visible to you even as a living crewmate. |
@@ -40,7 +43,9 @@ Controls that change what you see on screen and how other players see your name 
 | **See Kill Cooldown** | Displays kill-cooldown timers for other players. |
 | **Disable Kill Animation** | Skips the kill animation entirely when you eliminate someone. |
 | **Disable Lobby Music** | Mutes the looping background music in the lobby. |
+| **Old Ping Text** | Restores the old-style ping text display instead of the modern indicator. |
 | **Show Host** | Labels the current lobby host visually in the player list. |
+| **Show Vote Kicks** | Displays active vote-kick counts next to player names. |
 | **Show Chat Cooldown** | Displays the remaining cooldown before you can send another chat message. |
 | **Extend Chat Character Limit** | Allows chat messages longer than the default character cap. |
 | **Exit Meeting** | Lets you leave an active meeting screen early. |
@@ -66,7 +71,9 @@ Gameplay utilities that modify movement, automation, and self-preservation behav
 | **No Seeker Animation** | Suppresses the Seeker role's detection animation. |
 | **Better Chat Notifications** | Improves the default chat notification popups with clearer display. |
 | **Better Lobby Code Input** | Enhances the lobby-code input field for faster and more reliable entry. |
+| **Better Message Sounds** | Improves in-game message notification sounds. |
 | **Auto Rejoin After Game Ending** | Automatically rejoins the lobby once a match concludes. |
+| **Disable Shush Animation** | Suppresses the shush animation that plays during meetings. |
 | **Autokill** | Continuously and automatically kills the nearest eligible target. |
 | **Report Body on Murder** | Instantly reports the body of any player you kill. |
 | **Prevent Self-Report** | Blocks you from accidentally reporting a body that you killed yourself. |
@@ -141,7 +148,7 @@ The **Text Editor** sub-group gives you a live preview canvas for crafting richl
 
 - **Color & Gradient** — apply a solid color or a two-stop gradient across your name text
 - **Style tags** — bold (`<b>`), italic (`<i>`), underline (`<u>`), strikethrough (`<s>`), no-break (`<nobr>`)
-- **Font selection** — choose from 21 Barlow variants and specialty fonts including `Brook`, `LiberationSans`, `NotoSans`, `VCR`, `CONSOLA`, `digital-7`, `OCRAEXT`, and `DIN_Pro_Bold_700`
+- **Font selection** — choose from the 21 fonts listed in the [Font Reference](#available-fonts) below
 - **Size, indent, cspace, mspace, voffset, rotate** — fine-tune spacing, vertical offset, and rotation angle
 
 Changes in the Text Editor apply immediately to your **Custom Name** field and are reflected in-game without a restart.
@@ -161,3 +168,9 @@ When using **Set Fake Role** or **Automatically Set Fake Role**, you can choose 
 The Cycler and Confuser can also randomize your character's body type:
 
 `Normal` · `Horse` · `Long`
+
+### Available Fonts
+
+The Text Editor exposes all 21 fonts from the game's font atlas:
+
+`Barlow-Italic` · `Barlow-Medium` · `Barlow-Bold` · `Barlow-SemiBold` · `Barlow-SemiBold (Masked)` · `Barlow-ExtraBold` · `Barlow-BoldItalic` · `Barlow-BoldItalic (Masked)` · `Barlow-Black` · `Barlow-Light` · `Barlow-Regular` · `Barlow-Regular (Masked)` · `Barlow-Regular (Outline)` · `Brook` · `LiberationSans` · `NotoSans` · `VCR` · `CONSOLA` · `digital-7` · `OCRAEXT` · `DIN_Pro_Bold_700`

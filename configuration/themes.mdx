@@ -6,6 +6,15 @@ description: "Personalise SickoMenu's ImGui overlay with a per-config color pick
 
 SickoMenu renders its overlay with ImGui and exposes a full custom theme system through the **Settings → Customization** sub-tab. Every colour, opacity, scale, and animation value is persisted to your active config file in `SickoMenu/sicko-config/<name>.json`, so each named profile can carry its own visual identity. The settings described below are all read and written by `Settings::Load()` / `Settings::Save()` in `state.cpp`.
 
+## Hide Watermark / Hide Mod Stamp
+
+Two toggles control SickoMenu's own on-screen identifiers:
+
+- **Hide Watermark** (`HideWatermark`) removes the SickoMenu version watermark that is normally rendered in the corner of the screen.
+- **Hide Mod Stamp** (`HideModStamp`) hides the mod stamp shown during gameplay, which can be useful when streaming or recording.
+
+Both options are independent and can be toggled separately.
+
 ## Menu Theme Color
 
 Click the colour swatch next to **Menu Theme Color** to open the ImGui colour picker. The selected colour is stored as four normalised float components (`MenuThemeColor_R`, `MenuThemeColor_G`, `MenuThemeColor_B`, `MenuThemeColor_A`). This colour is used for the header bar, highlighted borders, and active toggle indicators throughout the overlay.
