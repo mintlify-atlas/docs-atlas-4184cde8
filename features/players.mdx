@@ -1,0 +1,88 @@
+---
+title: "Players Tab: Per-Player Actions and Trolling Tools"
+sidebarTitle: "Players Tab"
+description: "Explore the Players tab's per-player action menu, trolling utilities, and player info tools for managing and interacting with everyone in your lobby."
+---
+
+The Players tab is your command center for interacting with every connected player in the current lobby or game. Each player listed in the tab expands into a rich sub-menu that groups its features into three sections: direct **Player Actions**, **Trolling** tools, and an **Info** panel for data and moderation utilities.
+
+## Player Actions
+
+These are the core per-player controls available directly from a player's sub-menu. They cover everything from game-flow intervention to movement and vote manipulation.
+
+### Available Actions
+
+| Action | Description |
+|---|---|
+| **Call Meeting** | Immediately triggers an emergency meeting attributed to the selected player. |
+| **Skip Vote by All** | Forces every player to cast a skip vote during the current meeting. |
+| **Report Body** | Makes the selected player report the nearest dead body. |
+| **Spectate** | Shifts your view to observe the selected player's perspective in real time without taking control of them. |
+| **Kill** | Kills the selected player (requires host or appropriate SMAC rank). |
+| **Telekill** | Teleports the selected player to your position and kills them instantly. |
+| **Kick** | Removes the selected player from the lobby (host/rank required). |
+| **Votekick** | Initiates a votekick against the selected player. |
+| **Attempt to Ban** | Sends a ban RPC to the selected player; success depends on host privileges. |
+| **Ban** | Permanently bans the selected player from your lobby (host required). |
+| **Blacklist** | Adds the selected player to your SickoMenu blacklist. |
+| **Whitelist** | Adds the selected player to your SickoMenu whitelist, exempting them from ban/kick actions. |
+| **Shift** | Shapeshifts the selected player into another player's appearance. |
+| **Protect** | Applies a Guardian Angel protection shield to the selected player. |
+| **Vote Immunity** | Grants the selected player immunity from being voted out in the current meeting. |
+| **Teleport to Vent** | Teleports the selected player to a chosen vent on the current map. |
+| **Spam Teleport to Vent** | Rapidly and repeatedly teleports the selected player to a specific vent. |
+| **Spam Teleport to Random Vents** | Continuously teleports the selected player to random vents across the map. |
+| **Warn** | Issues a warning to the selected player via the SMAC moderation system. |
+
+<Note>
+  Actions such as **Kill**, **Ban**, **Kick**, and **Attempt to Ban** require you to be the lobby host or hold a sufficient rank in the SMAC (SickoMenu AntiCheat) permission system. Attempting these without the necessary privileges will have no effect or may be blocked.
+</Note>
+
+<Tip>
+  **Spectate** is a non-intrusive observation tool — it lets you follow a player's view in real time without overriding their controls or moving your own character. It is useful for monitoring suspected impostors or verifying task completions without interfering with ongoing gameplay.
+</Tip>
+
+---
+
+## Trolling
+
+The Trolling section contains more disruptive or cosmetic actions intended for use in private, controlled lobbies. These tools manipulate appearance, movement, roles, and game-flow in ways that can significantly affect other players' experiences.
+
+| Action | Description |
+|---|---|
+| **Send Blank Chat As** | Sends an empty (blank) chat message impersonating the selected player. |
+| **Force Meeting By** | Forces an emergency meeting as if called by the selected player. |
+| **Self-Report** | Makes the selected player report a body they are standing next to (or themselves if applicable). |
+| **Copy Outfit** | Copies the selected player's current cosmetics onto your own character. |
+| **Cosmetics Stealer** | Continuously mirrors the selected player's cosmetics onto you. |
+| **Cosmetics Resetter** | Resets the selected player's cosmetics back to their defaults. |
+| **Murder Loop** | Locks the selected player into a repeated kill-and-revive cycle. |
+| **Shift Everyone To** | Shapeshifts every player in the lobby into the selected player's appearance. |
+| **Unshift Everyone** | Reverts all shapeshifted players back to their original appearances. |
+| **Vote Off** | Casts every other player's vote against the selected player to guarantee an ejection. |
+| **Teleport To** | Teleports your character directly to the selected player's current position. |
+| **Attach To** | Locks your character to the selected player so you follow their every move. |
+| **Turn into Ghost** | Converts the selected player into a ghost without going through the normal death flow. |
+| **Set Role** | Assigns any available role (Crewmate, Impostor, Scientist, Engineer, Guardian Angel, Shapeshifter, Noisemaker, Phantom, Tracker, Detective, Viper, Judge, and ghost variants) to the selected player. |
+| **Force Color** | Sets the selected player's color to any of the 19 available colors. |
+| **Cycle Color** | Continuously cycles through all colors on the selected player. |
+| **Whisper To** | Sends a private chat message visible only to the selected player. |
+
+<Warning>
+  **Murder Loop** and **Spam Teleport to Vent / Random Vents** are highly disruptive actions that can make a lobby completely unplayable for the affected player. Use these features **only in private lobbies with the full knowledge and consent of all participants**. Using them against unwilling players in public lobbies is considered harassment and may result in reports or bans from the Among Us platform.
+</Warning>
+
+---
+
+## Info
+
+The Info section surfaces per-player data and moderation shortcuts without directly altering gameplay state.
+
+| Action | Description |
+|---|---|
+| **Steal Data** | Copies available network and account data from the selected player to your local state. |
+| **Copy PUID** | Copies the selected player's Platform User ID to your clipboard. |
+| **Copy Friend Code** | Copies the selected player's friend code to your clipboard. |
+| **Report Player** | Submits an in-game report against the selected player through Among Us's native reporting flow. |
+| **TempBan** | Adds the selected player to your temporary ban list, blocking them from rejoining your lobby for the current session. |
+| **Roles** | Displays the role history and current role assignment for the selected player. |

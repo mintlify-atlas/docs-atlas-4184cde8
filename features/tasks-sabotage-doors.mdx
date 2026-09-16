@@ -1,0 +1,137 @@
+---
+title: "Tasks, Sabotage, and Doors: Game State Manipulation"
+sidebarTitle: "Tasks & Sabotage"
+description: "Control task completion, trigger and auto-repair sabotages, and manipulate door states across every Among Us map with SickoMenu's game state tools."
+---
+
+The Tasks, Sabotage, and Doors tabs form three tightly interrelated panels for manipulating core game-state elements mid-round. Together they let you automate task completion on your behalf, trigger or instantly suppress any sabotage the current map supports, and lock or pin room doors to control player movement — all without touching the normal in-game UI.
+
+## Tasks Tab
+
+The Tasks tab gives you direct control over your task queue and the visual-task animations the game uses to verify honest play.
+
+### Drain Hide Timer
+
+Immediately empties the hide timer used in Hide and Seek game mode, causing it to expire without waiting for the natural countdown.
+
+### Complete All Tasks
+
+Completes every task in your current task list at once. This feature is also available as a configurable keybind labelled **Complete_Tasks** in the Keybinds settings panel, so you can trigger it with a single key press at any time without opening the menu.
+
+### Bypass Visual Tasks Being Off
+
+Visual tasks (Medbay Scan, Weapons, Shields, Trash) normally only show confirmation animations when the host has enabled them in game options. Enabling this toggle forces the animations to play and register as complete regardless of the host setting.
+
+### Play Animations
+
+SickoMenu can trigger the four visual-task completion animations independently of actually doing the task:
+
+| Button | Task |
+|---|---|
+| **Play Medbay Scan Animation** | Triggers the Medbay Scan bed animation |
+| **Play Shields Animation** | Triggers the Shields button-press animation |
+| **Play Trash Animation** | Triggers the trash-disposal animation |
+| **Play Weapons Animation** | Triggers the weapons-targeting animation |
+
+### Fake Cameras In Use
+
+Causes the security-camera indicator light on the map to appear active, making other players believe someone is watching the cameras even when no one is.
+
+### Task Enforcer
+
+Monitors task completion across players and enforces task-related rules as defined by the host's current configuration.
+
+### Disable Tasks
+
+Prevents tasks from appearing in or being assigned to your task list for the duration of the current round.
+
+---
+
+## Sabotage Tab
+
+The Sabotage tab provides both passive background controls and one-click buttons for triggering or resolving every sabotage type available on the current map.
+
+<Note>
+  **Disable Sabotages** and **Auto Repair Sabotages** both operate passively in the background. Once toggled on, no further action is required — Disable Sabotages blocks new sabotages from registering, while Auto Repair Sabotages watches for any active sabotage and resolves it automatically as soon as it fires.
+</Note>
+
+### Passive Controls
+
+| Toggle | Effect |
+|---|---|
+| **Disable Sabotages** | Prevents any sabotage from being triggered while active |
+| **Auto Repair Sabotages** | Automatically repairs any active sabotage the moment it is detected |
+
+### Manual Repair
+
+The **Repair Sabotage** button instantly resolves whatever sabotage is currently active. It is also bound to the **PAGE DOWN** key by default.
+
+<Tip>
+  Press **PAGE DOWN** at any time during a game to instantly repair any active sabotage without opening the SickoMenu overlay. This is the fastest way to clear a sabotage mid-chase or during a close-call situation.
+</Tip>
+
+### Trigger All / Random
+
+| Button | Effect |
+|---|---|
+| **Sabotage All** | Activates every sabotage simultaneously on the current map |
+| **Random Sabotage** | Picks and triggers a random sabotage from those available on the current map |
+
+### Per-Sabotage Controls
+
+Each sabotage can be triggered individually. Availability depends on the map currently loaded — not every sabotage exists on every map.
+
+| Sabotage | Maps |
+|---|---|
+| **Sabotage Lights** | The Skeld, Mira HQ, Polus, The Airship, The Fungle |
+| **Sabotage Reactor** | The Skeld, Polus |
+| **Sabotage Seismic Stabilizers** | The Fungle |
+| **Sabotage Crash Course** | The Airship |
+| **Sabotage Oxygen** | Mira HQ |
+| **Activate Mushroom Mixup** | The Fungle |
+| **Sabotage Comms** | The Skeld, Mira HQ, Polus, The Airship, The Fungle |
+
+### Extended Lights / Comms Controls
+
+| Feature | Description |
+|---|---|
+| **Disable Lights** | Cuts the lights without using the standard sabotage system |
+| **Disable Lights [Auto Moving Switches]** | Cuts the lights and automatically moves the repair switches so crewmates cannot fix them |
+| **Disable Fix Comms** | Prevents the communications sabotage from being repaired |
+
+### Spam and Infinite Options
+
+<Warning>
+  The Spam Sabotage features are extremely disruptive and will rapidly degrade the experience for all other players in the session. Use only in private lobbies with consenting participants.
+</Warning>
+
+| Feature | Description |
+|---|---|
+| **Spam Sabotage Reactor** | Repeatedly triggers the Reactor sabotage in rapid succession (Skeld / Polus only) |
+| **Spam Sabotage Oxygen** | Repeatedly triggers the Oxygen sabotage in rapid succession (Mira HQ only) |
+| **Infinite Mushroom Mixup** | Keeps Mushroom Mixup active indefinitely on The Fungle |
+
+---
+
+## Doors Tab
+
+The Doors tab lets you close, lock, and manage room doors across the map, giving impostor-side players a powerful tool for splitting groups or blocking escape routes.
+
+### Close All Doors
+
+Closes every closeable door on the current map simultaneously. This action is also available as the **Close_All_Doors** keybind so it can be triggered instantly from anywhere in the game.
+
+### Close Room Door
+
+Closes the door of whichever room your player is currently standing in. The corresponding keybind is **Close_Current_Room_Door**, also configurable in the Keybinds settings panel.
+
+### Pin / Unpin All Doors
+
+| Button | Effect |
+|---|---|
+| **Pin All Doors** | Locks all doors in their current state so they cannot be opened by other players |
+| **Unpin All Doors** | Releases all pinned doors, restoring normal open/close behaviour |
+
+### Auto Open Doors on Use
+
+When enabled, any door you interact with automatically opens regardless of its locked or closed state, letting you move freely through sealed rooms without triggering the standard door-opening animation or delay.

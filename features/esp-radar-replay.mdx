@@ -1,0 +1,84 @@
+---
+title: "ESP, Radar, and Replay: Real-Time Awareness Tools"
+sidebarTitle: "ESP & Radar"
+description: "SickoMenu's ESP draws world-space overlays on players, the Radar renders a live minimap, and Replay records and visualises movement paths for every player."
+---
+
+SickoMenu ships three complementary real-time awareness systems that each attack the information problem from a different angle. **ESP** draws overlays directly in world space — boxes, tracers, and distance labels anchored to every player on screen. **Radar** renders a resizable minimap in a corner of your HUD, showing all players, bodies, and ghosts on a map image you can interact with. **Replay** silently records movement data throughout the round and lets you play back polyline paths on the minimap so you can reconstruct where everyone has been. All three systems are independent and can be active at the same time.
+
+---
+
+## ESP
+
+ESP (Extra Sensory Perception) paints visual overlays on top of the game's world space so you can locate and track players through walls, at distance, and during chaotic fights. Configuration lives in the **ESP tab** of the SickoMenu interface.
+
+### Options
+
+| Option | Description |
+|---|---|
+| **Show ESP** | Master toggle for the entire ESP system. Disable this to hide all overlays without changing individual settings. |
+| **Show Ghosts** | Extends all overlays to dead players (ghosts), who are otherwise invisible to living crewmates. |
+| **Hide During Meetings** | Automatically suppresses all ESP overlays whenever the meeting/voting screen is open, reducing visual clutter. |
+| **Show Boxes** | Draws a rectangular bounding box around each player's sprite, making them easy to spot even when partially occluded by walls or objects. |
+| **Show Tracers** | Draws a line from your character's screen-space position to every other tracked player, giving an immediate directional heading to anyone on the map. |
+| **Show Distances** | Renders a numeric distance label next to each player's overlay, measured in in-game units from your character. |
+| **Role-based** | Colors each player's overlays according to their current role (Crewmate, Impostor, Engineer, etc.) rather than their cosmetic player color, making role deduction visible at a glance. |
+
+The ESP renderer uses a `WorldToScreen` projection that accounts for camera position and the current zoom level — overlays remain correctly anchored even while using Freecam or the Smooth Zoom feature.
+
+---
+
+## Radar
+
+The Radar is a live minimap overlay that sits on top of the HUD and updates in real time. Toggle it with the **INSERT** key (configurable under Settings → Keybinds → Show/Hide Radar). The radar window can be freely repositioned by dragging, or locked in place once you've found a comfortable spot.
+
+Map images are bundled as resources and are automatically selected based on the active map: **The Skeld** (`skeld.png`), **Mira HQ** (`mira_hq.png`), **Polus** (`polus.png`), **Airship** (`airship.png`), and **The Fungle** (`fungle.png`).
+
+### Options
+
+| Option | Description |
+|---|---|
+| **Show Radar** | Master toggle for the radar minimap (also bound to **INSERT** by default). |
+| **Show Dead Bodies** | Renders a dead-body icon (`dead_body.png`) on the radar at each corpse's map position. |
+| **Show Ghosts** | Renders ghost players on the radar, visible to you even though living players cannot see them in-world. |
+| **Right Click to Teleport** | Right-clicking anywhere on the radar minimap instantly teleports your character to the corresponding world-space position. |
+| **Shift + Left Click to Close Room Door** | While holding Shift, left-clicking a room area on the radar sends a door-close RPC for that room, without needing to navigate the Doors tab. |
+| **Hide Radar During Meetings** | Hides the radar overlay whenever the meeting screen is active. |
+| **Draw Player Icons** | Renders the player sprite icon (`player.png`) at each player's position instead of a simple colored dot. |
+| **Lock Radar Position** | Prevents accidental repositioning by locking the radar window in place; drag-to-move is disabled until you unlock it. |
+| **Show Border** | Draws a visible border frame around the radar window. |
+| **Radar Color** | Sets the tint color applied to the radar minimap background image. |
+
+<Tip>
+  **Right Click to Teleport** on the radar is one of the fastest ways to cross the map — simply right-click the destination on the minimap and your character jumps there instantly, no keyboard teleport menu required. Combine it with **Lock Radar Position** so you don't accidentally drag the window while clicking.
+</Tip>
+
+---
+
+## Replay
+
+The Replay system runs silently in the background throughout every game, recording each player's movement as a series of timestamped `WalkEvent` points. Those raw points are then simplified into smooth polylines using the Ramer–Douglas–Peucker algorithm (via `simplifiedPoints`) and drawn on the minimap so you can see exactly where everyone has been during the round.
+
+Toggle the Replay overlay with the **END** key (configurable under Settings → Keybinds → Show/Hide Replay).
+
+### Options
+
+| Option | Description |
+|---|---|
+| **Show Replay** | Master toggle for the replay overlay, also bound to **END** by default. |
+| **Show Only Last N Seconds** | Trims each player's visible path to only the most recent N seconds of movement, keeping the minimap readable in long games. |
+| **Clear After Meeting** | Automatically wipes all recorded movement data at the end of each meeting/voting round, so paths reset to a clean state at the start of each phase. |
+| **Draw Player Icons** | Renders the player sprite icon at the current (latest recorded) position of each player on the replay path, rather than just a line endpoint dot. |
+| **Replay Map Color** | Sets the tint color applied to the map background rendered beneath the replay paths. |
+
+### How replay recording works
+
+Internally, `Replay::WalkEvent_LineData` is maintained per player. Each entry stores a `playerId`, a `colorId` (for coloring the path), and two parallel arrays: `pendingPoints` / `pendingTimeStamps` which accumulate raw positions as they are polled from the game, and `simplifiedPoints` / `simplifiedTimeStamps` which hold the polyline-simplified version of those paths that is actually drawn. The simplification step keeps rendering performant even in long rounds with many players.
+
+`Replay::Reset(bool all)` is called on meeting end (when **Clear After Meeting** is enabled) to flush these arrays. `Replay::Init()` wires up the event hooks at game start, and `Replay::Render()` is invoked each frame to draw the current simplified paths onto the overlay.
+
+---
+
+<Note>
+  All three systems — ESP, Radar, and Replay — operate independently of one another. You can run all three simultaneously without conflict: ESP overlays appear in world space over the game view, while Radar and Replay both render as HUD windows that can be positioned anywhere on screen. Enabling or disabling one system has no effect on the others.
+</Note>

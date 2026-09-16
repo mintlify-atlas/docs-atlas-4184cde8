@@ -1,0 +1,122 @@
+---
+title: "Default Hotkeys and Keybind Customisation"
+sidebarTitle: "Hotkeys"
+description: "Complete reference of SickoMenu default hotkeys with Virtual Key codes, plus how to remap bindings via the in-game Settings tab or JSON config."
+---
+
+SickoMenu registers a set of global hotkeys that work while Among Us is in focus. Most actions have a default key assigned out of the box; others ship unbound (`—`) so they do not conflict with keys you may already use. Every binding can be changed at any time — either through the in-game **Settings → Keybinds** tab or by directly editing the JSON config file on disk.
+
+## Default Hotkeys
+
+### Core hotkeys (from README)
+
+| Action | Default Key |
+|---|---|
+| Show Menu | `DELETE` |
+| Show Radar | `INSERT` |
+| Show Console | `HOME` |
+| Show Replay | `END` |
+| Repair Sabotage | `PAGE DOWN` (`VK_NEXT`) |
+| NoClip | `CTRL` (`VK_CONTROL`) |
+| Panic / Disable SickoMenu | `PAUSE BREAK` (`VK_PAUSE`) |
+
+### Extended hotkeys (from `user/keybinds.h` and `user/state.hpp`)
+
+These bindings are part of the `KeyBinds::Config` struct. Entries marked `—` have no default key assigned (`0x00`) and must be set manually before use.
+
+| Action | Default Key |
+|---|---|
+| Toggle Auto-Kill | `—` |
+| Close All Doors | `—` |
+| Toggle Zoom | `—` |
+| Toggle Freecam | `—` |
+| Close Current Room Door | `—` |
+| Toggle Chat Always Active | `—` |
+| Toggle Read Ghost Messages | `—` |
+| Toggle HUD | `—` |
+| Reset Appearance | `—` |
+| Randomize Appearance | `—` |
+| Complete Tasks | `—` |
+| Toggle Sicko (alias for Panic) | `PAUSE BREAK` (`VK_PAUSE`) |
+| Cancel Start | `—` |
+| Leave Game | `—` |
+
+<Note>
+  Hotkey values are stored as Windows Virtual Key codes. A full list of `VK_` constants is available in Microsoft's official documentation: [Virtual-Key Codes — Win32 apps](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes). Use the hexadecimal values shown there when editing the config file directly.
+</Note>
+
+## Customising Keybinds
+
+### In-game (recommended)
+
+<Steps>
+  <Step title="Open SickoMenu">
+    Press **DELETE** (or your current Show Menu binding) while in Among Us to open the overlay.
+  </Step>
+  <Step title="Navigate to Settings → Keybinds">
+    Click the **Settings** tab in the SickoMenu overlay, then select the **Keybinds** sub-tab.
+  </Step>
+  <Step title="Click the action you want to remap">
+    Each action shows its current key. Click the binding button next to the action you want to change, then press the new key on your keyboard.
+  </Step>
+  <Step title="Changes are saved automatically">
+    SickoMenu writes the updated values to `sicko-config/default.json` (or whichever config is selected) when you close the menu or change scene. No manual save step is required.
+  </Step>
+</Steps>
+
+### Via the config file
+
+After SickoMenu has been loaded at least once, a config file is written to the Among Us directory:
+
+```text
+<Among Us directory>/sicko-config/default.json
+```
+
+Open this file in any text editor. The `keybinds` section uses Windows Virtual Key code integers (decimal or hexadecimal). Below is a representative snippet showing the structure:
+
+```json
+{
+  "keybinds": {
+    "Toggle_Menu": 46,
+    "Toggle_Radar": 45,
+    "Toggle_Console": 36,
+    "Repair_Sabotage": 34,
+    "Toggle_Noclip": 17,
+    "Toggle_Autokill": 0,
+    "Close_All_Doors": 0,
+    "Toggle_Zoom": 0,
+    "Toggle_Freecam": 0,
+    "Close_Current_Room_Door": 0,
+    "Toggle_Replay": 35,
+    "Toggle_ChatAlwaysActive": 0,
+    "Toggle_ReadGhostMessages": 0,
+    "Toggle_Hud": 0,
+    "Reset_Appearance": 0,
+    "Randomize_Appearance": 0,
+    "Complete_Tasks": 0,
+    "Toggle_Sicko": 19,
+    "Cancel_Start": 0,
+    "Leave_Game": 0
+  }
+}
+```
+
+Common decimal values for reference:
+
+| Key | Decimal | Hex |
+|---|---|---|
+| DELETE | 46 | `0x2E` |
+| INSERT | 45 | `0x2D` |
+| HOME | 36 | `0x24` |
+| END | 35 | `0x23` |
+| PAGE DOWN | 34 | `0x22` |
+| PAGE UP | 33 | `0x21` |
+| CTRL (any) | 17 | `0x11` |
+| PAUSE BREAK | 19 | `0x13` |
+| F1–F12 | 112–123 | `0x70`–`0x7B` |
+
+After editing, save the file and restart Among Us (or reload the config from the Settings tab) for the changes to take effect.
+
+<Tip>
+  By default, SickoMenu hotkeys are active even while the in-game chat box is focused. If you want hotkeys to fire only when chat is **not** open, disable the **Allow Activating Keybinds while Chatting** option found in **Settings → Keybinds** (it corresponds to the `KeybindsWhileChatting` flag in `state.hpp`). This prevents accidental triggering when typing messages.
+</Tip>

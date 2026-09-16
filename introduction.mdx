@@ -1,0 +1,66 @@
+---
+title: "SickoMenu: Among Us Utility Mod, Complete Overview"
+sidebarTitle: "Introduction"
+description: "SickoMenu is a Windows DLL mod for Among Us using IL2CPP hooks and an ImGui overlay, built for educational and experimental use in private lobbies only."
+---
+
+SickoMenu is an open-source C++ utility mod for Among Us on Windows. It injects into the game process as a native DLL, attaches IL2CPP hooks to intercept and extend game logic at runtime, and renders its interface as a DirectX 11 ImGui overlay drawn directly on top of the game window. The project is maintained by **g0aty** with community contributions and is intended **solely for educational and experimental purposes** — studying game mechanics, exploring anti-cheat systems, and learning about runtime memory modification in a controlled environment.
+
+## Deployment Modes
+
+SickoMenu ships in two distinct DLL forms. Choose the one that best fits your workflow:
+
+| Mode | File | How it loads |
+|---|---|---|
+| **Injector** | `SickoMenu.dll` | Manually inject with any DLL injector after the game launches. |
+| **Version Proxy** | `version.dll` | Place in the Among Us directory; the game automatically loads it on startup via Windows DLL proxy-loading. |
+
+The Version Proxy method is the only mode supported on Linux (Proton/Wine) and macOS (CrossOver / Wine / Whisky).
+
+## Build Configurations
+
+The repository exposes four Visual Studio build configurations covering both deployment modes:
+
+| Configuration | DLL output | Description |
+|---|---|---|
+| `Release` | `SickoMenu.dll` | Fully optimised build — all debug information stripped. Recommended for everyday use. |
+| `Release_Version` | `version.dll` | Optimised version-proxy build with debug information stripped. |
+| `Debug` | `SickoMenu.dll` | Includes debug symbols and attaches a console window with diagnostic output. For developers and bug hunters. |
+| `Debug_Version` | `version.dll` | Debug-enabled version-proxy build with the attached console window. |
+
+## Supported Platforms
+
+| Platform | Architecture | Status |
+|---|---|---|
+| Steam | x86 (32-bit) | ✅ Fully supported |
+| itch.io | x86 (32-bit) | ✅ Fully supported |
+| Epic Games | x64 (64-bit) | 🟡 Supported — experimental |
+| Microsoft Store / Xbox App | x64 (64-bit) | 🟡 Supported — experimental |
+| iOS / iPadOS / Android | — | ❌ Not supported |
+| Nintendo Switch / Xbox / PlayStation | — | ❌ Not supported |
+
+Select the correct ZIP from the releases page that matches your platform's architecture (x86 for Steam/itch.io, x64 for Epic/MS Store/Xbox).
+
+## Key Technical Facts
+
+- **Language:** C++ (native Windows DLL, MSVC toolchain)
+- **UI framework:** [Dear ImGui](https://github.com/ocornut/imgui) rendered via a DirectX 11 hook
+- **Game runtime:** IL2CPP — hooks are generated from `GameAssembly.dll` scaffolding using [Il2CppInspectorRedux](https://github.com/LukeFZ/Il2CppInspectorRedux)
+- **Graphics hook:** DirectX 11 present-hook for overlay rendering
+- **Platform requirement:** Windows (native); Linux and macOS via Wine/Proton/CrossOver only
+- **Config storage:** `sicko-config/default.json` in the Among Us directory (created on first run)
+
+<Note>
+  SickoMenu is designed for **private lobbies with consenting players only**. Using it in public matches violates Innersloth's [Terms of Service](https://www.innersloth.com/terms-of-use-for-the-games/) and their [Modding Policy](https://www.innersloth.com/among-us-mod-policy/). If you accidentally join a public lobby, press **PAUSE BREAK** immediately to engage Panic Mode and disable the mod. The developers assume no liability for misuse, game bans, or data loss.
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Download the correct release ZIP and get SickoMenu running on Windows, Linux, or macOS.
+  </Card>
+  <Card title="Hotkeys" icon="keyboard" href="/hotkeys">
+    View all default key bindings and learn how to customise them via config file or the in-game Settings panel.
+  </Card>
+</CardGroup>

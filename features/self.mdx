@@ -1,0 +1,163 @@
+---
+title: "Self Tab: Personal Visuals, Movement, and Role Tools"
+sidebarTitle: "Self Tab"
+description: "Control personal visuals, movement hacks, role-specific abilities, cosmetic randomizers, and an in-game text editor from the Self tab."
+---
+
+The **Self** tab is your personal-player feature hub in SickoMenu. Every toggle here affects only your own client unless otherwise noted — from extending your vision and moving through walls, to spoofing your role display, cycling cosmetics in real time, and crafting richly formatted names through the built-in text editor. The tab is split into five sub-groups: **Visuals**, **Utils**, **Roles**, **Randomizers**, and **Text Editor**.
+
+---
+
+## Visuals
+
+Controls that change what you see on screen and how other players see your name or status.
+
+| Feature | Description |
+|---|---|
+| **Max Vision** | Removes the vision radius limit, letting you see the entire map at all times. |
+| **Wallhack** | Renders all players and objects through walls. |
+| **Disable HUD** | Hides all in-game HUD elements (tasks, cooldown bar, etc.). |
+| **Freecam** | Detaches the camera from your character so you can pan freely around the map. |
+| **Zoom** | Zooms the camera out to reveal a larger area of the map. |
+| **Smooth Zoom** | Animates zoom transitions instead of snapping instantly. |
+| **Show Shadows While Zoomed** | Keeps shadow rendering active even at high zoom levels. |
+| **Always Show Chat Button** | Keeps the chat button visible at all times, regardless of game state. |
+| **Allow Ctrl+C/V in Chat** | Enables clipboard copy and paste shortcuts inside the chat input. |
+| **Read Ghost Messages** | Lets you read messages sent by dead players that are normally hidden from the living. |
+| **Custom Name** | Replaces your displayed name with a custom string. |
+| **Custom Name for Everyone** | Pushes your custom name to all other players' clients. |
+| **Reveal Roles** | Shows every player's actual role next to their name. |
+| **Localize Role Names** | Displays revealed role names in the game's current language. |
+| **Abbreviate Role Names** | Shortens revealed role labels (e.g., *Eng* for Engineer). |
+| **Player Colored Dots** | Renders a color-coded dot next to each player's name. |
+| **Show Player Info in Lobby** | Displays extended player data (level, platform, friend code) while in the lobby. |
+| **Reveal Votes** | Shows who voted for whom during meetings. |
+| **Reveal Anonymous Votes** | Unmasks votes cast in Anonymous Voting mode. |
+| **See Ghosts** | Makes dead players visible to you even as a living crewmate. |
+| **See Phantoms** | Reveals Phantom-role players while they are vanished. |
+| **See Players In Vents** | Highlights players who are currently hiding inside vents. |
+| **See Protections** | Shows Guardian Angel protection shields on protected players. |
+| **See Kill Cooldown** | Displays kill-cooldown timers for other players. |
+| **Disable Kill Animation** | Skips the kill animation entirely when you eliminate someone. |
+| **Disable Lobby Music** | Mutes the looping background music in the lobby. |
+| **Show Host** | Labels the current lobby host visually in the player list. |
+| **Show Chat Cooldown** | Displays the remaining cooldown before you can send another chat message. |
+| **Extend Chat Character Limit** | Allows chat messages longer than the default character cap. |
+| **Exit Meeting** | Lets you leave an active meeting screen early. |
+
+<Note>
+**Zoom controls:** use **Scroll Wheel** to zoom in and out. While **Freecam** is active, hold **Shift + Scroll Wheel** to change the freecam movement speed.
+</Note>
+
+---
+
+## Utils
+
+Gameplay utilities that modify movement, automation, and self-preservation behaviour.
+
+| Feature | Description |
+|---|---|
+| **Unlock Vents** | Allows crewmates and non-engineer roles to enter vents. |
+| **Move While in Vent & Shapeshifting** | Lets you move your character while inside a vent or mid-shapeshift. |
+| **Always Move** | Forces your character to remain movable even during sequences that normally lock movement. |
+| **Role Abilities Bypass Comms Sabotages** | Keeps role-specific abilities functional even when Communications is sabotaged. |
+| **Copy Lobby Code on Disconnect** | Automatically copies the current lobby code to your clipboard when you are disconnected. |
+| **NoClip** | Removes collision so you can walk through walls and any other solid geometry. |
+| **No Seeker Animation** | Suppresses the Seeker role's detection animation. |
+| **Better Chat Notifications** | Improves the default chat notification popups with clearer display. |
+| **Better Lobby Code Input** | Enhances the lobby-code input field for faster and more reliable entry. |
+| **Auto Rejoin After Game Ending** | Automatically rejoins the lobby once a match concludes. |
+| **Autokill** | Continuously and automatically kills the nearest eligible target. |
+| **Report Body on Murder** | Instantly reports the body of any player you kill. |
+| **Prevent Self-Report** | Blocks you from accidentally reporting a body that you killed yourself. |
+| **Fake Alive** | Makes you appear alive to the server even after dying. |
+| **God Mode** | Grants full kill immunity — no source of death can eliminate you. |
+| **Teleport** | Warps your character to a selected location on the map. |
+| **Rotate Everyone** | Rotates all other players around a central axis. |
+| **Select Role / Set Role** | Chooses and applies a specific role to your own player. |
+| **Set Fake Role** | Sets a false role label that other players see for your name. |
+| **Automatically Set Fake Role** | Applies the configured fake role automatically when a game starts. |
+
+<Tip>
+**God Mode** and **Fake Alive** manipulate your local death state. Their effectiveness depends on whether you are the host. As a non-host, other clients may still register your death via server-authoritative events — use these tools primarily as host or in conjunction with other self-preservation options for best results.
+</Tip>
+
+---
+
+## Roles
+
+Per-role cooldown removals and ability enhancements that apply to your own character.
+
+| Feature | Description |
+|---|---|
+| **Infinite Emergency Meetings** | Removes the cap on how many emergency meetings you can call. |
+| **No Ladder/Zipline Cooldown** | Eliminates the cooldown between ladder or zipline uses. |
+| **No Vent Cooldown** | Removes the Engineer's vent entry cooldown. |
+| **Infinite Vent Time** | Lets you stay in a vent indefinitely without being ejected. |
+| **No Vitals Cooldown** | Removes the Scientist's Vitals panel access cooldown. |
+| **Infinite Battery** | Prevents the Scientist's battery from draining while using Vitals. |
+| **No Tracking Cooldown** | Removes the Tracker's tracking activation cooldown. |
+| **Infinite Tracking** | Keeps tracked player markers visible without a time limit. |
+| **No Interrogate Cooldown** | Removes the Detective's interrogation ability cooldown. |
+| **No Task Requirement** | Allows the Judge to use overrule votes without completing tasks first. |
+| **No Protect Cooldown** | Removes the Guardian Angel's protection ability cooldown. |
+| **No Kill Cooldown** | Removes the kill cooldown for Impostors and other killing roles. |
+| **Kill Other Impostors** | Allows you to kill fellow Impostor teammates. |
+| **Kill Reach** | Extends your kill interaction range to the maximum possible distance. |
+| **Do Tasks as Impostor** | Lets Impostors interact with and complete tasks normally. |
+| **No Shapeshift Animation** | Suppresses the Shapeshifter's transformation animation. |
+| **Infinite Shapeshift Duration** | Keeps you permanently shifted without the duration expiring. |
+
+---
+
+## Randomizers
+
+Cosmetic automation tools that cycle or randomize your appearance during a match.
+
+### Cycler
+
+The **Cycler** periodically swaps your hat, skin, visor, pet, nameplate, and name at a configurable interval.
+
+| Option | Description |
+|---|---|
+| **Cycler** | Master toggle — enables the automatic appearance cycler. |
+| **Cycle in Meeting** | Continues cycling your appearance even while a meeting is active. |
+| **Cycle Between Players** | Copies and cycles through the outfits of other players in the lobby. |
+| **Cycle for Everyone** | Pushes each cycled appearance to all other players' clients. |
+
+### Confuser
+
+**Confuser** randomizes your entire appearance on demand or on a trigger (join, start, kill, vent, meeting). It differs from the Cycler in that it fires a single randomization event rather than running on a timer.
+
+### Cosmetic Presets
+
+Save and instantly load named cosmetic loadouts (hat, skin, visor, pet, nameplate, and color). Presets can be applied manually or set to apply automatically when joining a lobby.
+
+---
+
+## Text Editor
+
+The **Text Editor** sub-group gives you a live preview canvas for crafting richly formatted in-game names and text strings. Formatting options available directly in the editor:
+
+- **Color & Gradient** — apply a solid color or a two-stop gradient across your name text
+- **Style tags** — bold (`<b>`), italic (`<i>`), underline (`<u>`), strikethrough (`<s>`), no-break (`<nobr>`)
+- **Font selection** — choose from 21 Barlow variants and specialty fonts including `Brook`, `LiberationSans`, `NotoSans`, `VCR`, `CONSOLA`, `digital-7`, `OCRAEXT`, and `DIN_Pro_Bold_700`
+- **Size, indent, cspace, mspace, voffset, rotate** — fine-tune spacing, vertical offset, and rotation angle
+
+Changes in the Text Editor apply immediately to your **Custom Name** field and are reflected in-game without a restart.
+
+---
+
+## Reference
+
+### Available Fake Roles
+
+When using **Set Fake Role** or **Automatically Set Fake Role**, you can choose from any of the following display labels:
+
+`Crewmate` · `Impostor` · `Scientist` · `Engineer` · `Guardian Angel` · `Shapeshifter` · `Crewmate Ghost` · `Impostor Ghost` · `Noisemaker` · `Phantom` · `Tracker` · `Detective` · `Viper` · `Judge`
+
+### Available Body Types
+
+The Cycler and Confuser can also randomize your character's body type:
+
+`Normal` · `Horse` · `Long`

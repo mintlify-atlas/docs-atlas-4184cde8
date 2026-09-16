@@ -1,0 +1,126 @@
+---
+title: "Game Tab: Lobby Controls, Chat, and Moderation"
+sidebarTitle: "Game Tab"
+description: "Manage lobby settings, broadcast chat messages, run host utilities, configure anticheat (SMAC), and review player and lobby history from the Game tab."
+---
+
+The **Game** tab centralizes tools that affect the lobby or match as a whole rather than just your own player. From here you can alter movement and kill-distance settings, broadcast messages through SickoChat, run host-level moderation actions, configure SickoMenu's built-in anticheat system (SMAC), and browse a persistent log of players and lobbies you have encountered. The tab is divided into five sub-sections: **General**, **Chat**, **Utils**, **Anticheat (SMAC)**, and **History**.
+
+---
+
+## General
+
+Broad lobby and match controls — most of these require you to be the host or have host-equivalent authority.
+
+| Feature | Description |
+|---|---|
+| **Player Speed Multiplier** | Adjusts the movement speed modifier applied to all players in the lobby. |
+| **Modify Kill Distance** | Changes the kill interaction range; supports preset values (Short / Medium / Long) as well as numeric steps from 3 through 20. |
+| **Random Color** | Assigns your player a randomly selected color. |
+| **Set Color** | Locks your player to a specific color chosen from the full palette. |
+| **Snipe Color** | Instantly claims a color that is currently taken by another player. |
+| **Console** | Opens the in-game SickoMenu developer console. |
+| **Reset Appearance** | Reverts your cosmetics to the state saved before any SickoMenu modifications. |
+| **Kill Everyone** | Sends a kill RPC to every eligible player in the game. |
+| **Protect Everyone** | Applies Guardian Angel protection to every player simultaneously. |
+| **Disable Venting** | Prevents all players (including Engineers) from using vents. |
+| **Pause Vent Blocking While Venting** | Suspends vent-block enforcement only while you are inside a vent. |
+| **Spam Report** | Rapidly sends repeated body-report RPCs. |
+| **Teleport All to Vent** | Moves every player to the currently selected vent. |
+| **Spam TP All to Vent** | Continuously teleports all players to the selected vent in rapid succession. |
+| **Spam TP All to Random Vents** | Continuously teleports all players to randomly chosen vents. |
+| **Attempt to Ban Everyone** | Sends a ban attempt RPC against every non-whitelisted player in the lobby. |
+| **Kill All Crewmates** | Kills every player currently assigned a crewmate-side role. |
+| **Kill All Impostors** | Kills every player currently assigned an impostor-side role. |
+| **Kick Everyone From Vents** | Forces any player currently in a vent to be ejected immediately. |
+| **End Meeting** | Forcibly ends the current emergency meeting. |
+
+---
+
+## Chat
+
+Tools for composing, broadcasting, and spamming chat messages.
+
+| Feature | Description |
+|---|---|
+| **Chat Message** | Text input field for the message you want to send. |
+| **Send** | Delivers the composed message to the in-game chat. |
+| **Send SickoChat** | Broadcasts the message as a SickoChat (`/sc`) packet visible to other SickoMenu users. |
+| **Spam** | Repeatedly sends the composed message to flood the chat. |
+| **Chat Presets** | Stores and recalls named sets of messages for quick deployment. |
+
+<Note>
+**SickoChat** is SickoMenu's peer-to-peer chat channel. To use it from within the normal chat box, type:
+
+```
+/sc <your message>
+```
+
+The `/sc` command prefix routes the message through the SickoChat system so that other SickoMenu users in the lobby receive it even if normal chat is restricted.
+</Note>
+
+---
+
+## Utils
+
+Host and moderation utilities for lobby management, player safety, and automated enforcement.
+
+| Feature | Description |
+|---|---|
+| **Ignore Whitelisted Players [Ban/Kick]** | Excludes whitelisted friend codes from any ban or kick action. |
+| **Attempt to Crash** | Sends a malformed RPC intended to crash the target client. |
+| **Remove Lobby** | Destroys the current lobby, disconnecting all players. |
+| **Remove Map** | Unloads the current map from the game session. |
+| **Ban Everyone** | Issues a ban against every non-whitelisted player in the lobby. |
+| **Kick Everyone** | Issues a kick against every non-whitelisted player in the lobby. |
+| **Kick AFK Players** | Automatically kicks players who have been idle beyond the configured threshold. |
+| **Enable AFK Notifications** | Sends a warning notification to a player before they are kicked for inactivity. |
+| **Whitelisted Players Only** | Restricts the lobby so that only players on your whitelist can remain. |
+| **Enable WL Notifications** | Notifies you when a non-whitelisted player joins the lobby. |
+| **Ban Repeatedly Rejoining Players** | Permanently bans players who disconnect and rejoin more than the configured number of times. |
+| **Warn/Kick By Name-Checker** | Automatically warns or kicks players whose names match entries in the forbidden-names list. |
+| **Show Player Data Notifications** | Displays a HUD notification with player info (friend code, platform, level) on join. |
+| **Kick Warned Players** | Kicks players who have accumulated the configured number of warnings. |
+| **Ban Warned Players** | Bans players who have accumulated the configured number of warnings. |
+| **Notify Warned Players** | Sends a chat notification to a player each time they receive a warning. |
+| **Enable Temp-Ban System** | Activates the temporary-ban system, which lifts bans after a set duration. |
+
+<Warning>
+**Ban, Kick, and Remove Lobby** actions require you to be the **host** of the lobby or hold host-equivalent authority granted by the moderation role system. Attempting these features as a non-host will either have no effect or may trigger the server's anticheat. Always verify your host status before using destructive actions.
+</Warning>
+
+---
+
+## Anticheat (SMAC)
+
+SickoMenu Anticheat (SMAC) monitors other players' RPCs and game events for suspicious behaviour and applies configurable punishments automatically.
+
+| Feature | Description |
+|---|---|
+| **Enable Anticheat (SMAC)** | Master toggle that activates the SMAC monitoring system. |
+| **Whitelist** | Friend codes added here are exempt from all SMAC punishments. |
+| **Blacklist** | Friend codes added here are immediately punished when detected in the lobby. |
+
+SMAC tracks a wide range of checks including (but not limited to): invalid colors or cosmetics, suspicious chat content, abnormal task-completion rates, illegal role RPCs, improper murder/shapeshift/vanish events, and out-of-range level values.
+
+When a violation is detected, SMAC applies the configured punishment level:
+
+- **Do Nothing** — log the event silently
+- **Warn Self** — send a warning to the offending player
+- **Kick** *(host only)* — remove the player from the lobby
+- **Ban** *(host only)* — permanently ban the player from the lobby
+
+Punishment severity can be configured globally or overridden per detection reason.
+
+---
+
+## History
+
+Persistent logs that survive across sessions, letting you look up players or lobbies from past matches.
+
+| Feature | Description |
+|---|---|
+| **Player History** | A scrollable record of every player you have encountered, storing their name, friend code, PUID, level, platform, and whether they were detected as a modded client. |
+| **Lobby History** | A log of the last lobbies you joined, including the lobby code and host name. |
+
+Player History stores up to **50** entries by default; Lobby History retains the last **20** lobbies. Both logs can be searched and entries can be promoted to the whitelist or blacklist directly from the history view.

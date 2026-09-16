@@ -1,0 +1,83 @@
+---
+title: "Contributing to SickoMenu: Pull Requests and Code Style"
+sidebarTitle: "Contributing"
+description: "How to fork SickoMenu, create a feature branch, open a pull request, and follow code style conventions for C++ contributions on GitHub."
+---
+
+Contributions to SickoMenu are welcome and appreciated. The project is licensed under **GPL-3.0**, so all contributions must be compatible with that licence. Development happens publicly on GitHub at [g0aty/SickoMenu](https://github.com/g0aty/SickoMenu), and the best place to discuss changes before writing code is the project's Discord server.
+
+## Contribution Workflow
+
+<Steps>
+  <Step title="Fork the repository">
+    Create your own fork at [https://github.com/g0aty/SickoMenu/fork](https://github.com/g0aty/SickoMenu/fork). This gives you a personal copy of the repository to work in without affecting the upstream project.
+  </Step>
+
+  <Step title="Create a feature branch">
+    Work on a dedicated branch rather than directly on `main`. Use a descriptive name that summarises what you are adding or fixing:
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+  </Step>
+
+  <Step title="Make focused, well-described commits">
+    Keep each commit to a single logical change. Write a commit message that explains *what* changed and *why*:
+    ```bash
+    git commit -am 'Add some feature'
+    ```
+  </Step>
+
+  <Step title="Push to your fork">
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+  </Step>
+
+  <Step title="Open a Pull Request against main">
+    Go to your fork on GitHub and click **Compare & pull request**. Target the `main` branch of `g0aty/SickoMenu`. Write a clear description of what your PR does and why it should be merged. Link any relevant issues or Discord discussions.
+  </Step>
+</Steps>
+
+## Guidelines
+
+- **Keep PRs focused.** A pull request that does one thing well is far easier to review and merge than one that bundles multiple unrelated changes.
+- **Describe your changes.** The PR body should explain what was changed, why it was changed, and how it was tested. Screenshots or short recordings are helpful for GUI changes.
+- **Documentation and README improvements are welcome** as long as genuine effort has been put into them. Typo fixes alone are not necessary to open as PRs — but meaningful documentation additions and corrections are appreciated.
+- **Credit inspiration from other mods** in source-code comments. The project already credits works like [AmongUsMenu](https://github.com/BitCrackers/AmongUsMenu) from the BitCrackers team. If a feature draws from another open-source mod, note it with a comment at the relevant site.
+- **Discuss large changes in Discord first.** If you are planning a significant refactor, a new subsystem, or a change that touches many files, bring it up in [#development](https://discord.gg/sickos) before investing time writing the code. This avoids duplicated effort and ensures the change aligns with the project's direction.
+
+## Updating for Game Patches
+
+When Among Us ships an update, the IL2CPP metadata in `GameAssembly.dll` changes and the bindings in the `appdata/` directory become stale. To update them yourself (FAQ Q11):
+
+1. Obtain `GameAssembly.dll` and `global-metadata.dat` from the updated Among Us installation.
+2. Open [Il2CppInspectorRedux](https://github.com/LukeFZ/Il2CppInspectorRedux) and drag both files onto it.
+3. Choose **Generate C++ scaffolding** output.
+4. Copy the regenerated files into the `appdata/` directory of your SickoMenu clone, replacing the old versions:
+   - `il2cpp-classes.h`
+   - `il2cpp-functions.h`
+   - `il2cpp-functions.cpp`
+   - `il2cpp-types.h`
+   - `il2cpp-api-functions.h`
+5. Adjust any naming or `#define` conventions to match those used in the rest of the SickoMenu source.
+6. Rebuild, fix any compilation errors introduced by API changes in the new game version, and open a PR.
+
+## Discord
+
+The SickoMenu community Discord is the primary place for real-time discussion:
+
+**[https://discord.gg/sickos](https://discord.gg/sickos)**
+
+Use it to discuss feature ideas, ask questions about the codebase, coordinate on game-update support, or get feedback before opening a large PR.
+
+## Licence
+
+SickoMenu is released under the **GNU General Public Licence v3.0 (GPL-3.0)**. By submitting a pull request you agree that your contribution will be distributed under the same licence. Contributions that introduce code under an incompatible licence cannot be accepted.
+
+<Tip>
+  Before opening a PR for a large new feature, search the existing [GitHub Issues](https://github.com/g0aty/SickoMenu/issues) and ask in the Discord server. Someone else may already be working on the same thing, there may be a design decision that affects your approach, or the feature may have already been considered and declined. A quick check can save significant time on both sides.
+</Tip>
+
+<Note>
+  **Mod compatibility is explicitly out of scope.** SickoMenu will never add support for running alongside other Among Us mods on the same client. Other mods can detect SickoMenu's presence or flag its network RPCs. Compatibility with other mods is not guaranteed and will not be pursued. Do not open issues or PRs requesting inter-mod support.
+</Note>

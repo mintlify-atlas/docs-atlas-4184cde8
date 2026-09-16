@@ -1,0 +1,229 @@
+---
+title: "Install SickoMenu on Windows, Linux, and macOS"
+sidebarTitle: "Installation"
+description: "How to install SickoMenu on Windows, Linux via Proton/Wine, and macOS via CrossOver or Wine, using version.dll proxy or a DLL injector."
+---
+
+Installing SickoMenu requires placing the correct DLL file into your Among Us game directory — or injecting it at runtime — and then configuring your environment to load it. The exact steps vary by operating system and Among Us platform. Follow the tab for your OS below, then refer to the platform-specific directory paths to find your Among Us folder.
+
+<Warning>
+  Antivirus software (including Windows Defender) commonly flags SickoMenu's DLL files as malware. **This is a false positive.** The detections are triggered by patterns associated with memory modification, which is inherent to how any game mod works. The compiled DLLs are built by GitHub Actions directly from the open-source repository — nothing is hidden. To prevent the file from being quarantined or deleted automatically, add your Among Us directory (or the SickoMenu DLL itself) to your antivirus exclusion/whitelist list. For Windows Security, follow [Microsoft's exclusions guide](https://www.elevenforum.com/t/add-or-remove-exclusions-for-microsoft-defender-antivirus-in-windows-11.8797/).
+</Warning>
+
+## Installation Steps
+
+<Tabs>
+  <Tab title="Windows">
+    ### Download the correct release
+
+    SickoMenu provides separate builds for different Among Us platforms. Using the wrong architecture will result in the menu not loading.
+
+    | Among Us platform | Required build |
+    |---|---|
+    | Steam | x86 (32-bit) |
+    | itch.io | x86 (32-bit) |
+    | Epic Games | x64 (64-bit) |
+    | Microsoft Store | x64 (64-bit) |
+    | Xbox App | x64 (64-bit) |
+
+    <Steps>
+      <Step title="Download the release ZIP">
+        Go to the [latest releases page](https://github.com/g0aty/SickoMenu/releases/latest) and download the ZIP that matches your Among Us platform (x86 for Steam/itch.io, x64 for Epic/MS Store/Xbox).
+      </Step>
+      <Step title="Extract the archive">
+        Right-click the downloaded ZIP and select **Extract All**, or use 7-Zip. Note where you extract the files — you will need both `SickoMenu.dll` and `version.dll` from inside the archive.
+      </Step>
+      <Step title="Choose your loading method">
+        **Method A — Version Proxy (recommended):**
+        Copy `version.dll` into your Among Us directory (the folder containing `Among Us.exe`). No injector is required; the game loads the DLL automatically on startup.
+
+        **Method B — Manual Injection:**
+        Keep `SickoMenu.dll` accessible. After Among Us has launched and reached the main menu, open your preferred DLL injector and inject `SickoMenu.dll` into the `Among Us.exe` process.
+      </Step>
+      <Step title="Launch Among Us">
+        Start the game through your platform's launcher (Steam, Epic, Xbox App, etc.). Once the main menu loads you should see a small SickoMenu watermark in the corner. Press **DELETE** to open the menu.
+      </Step>
+    </Steps>
+
+    ### Among Us directory locations (Windows)
+
+    | Platform | How to find the directory |
+    |---|---|
+    | **Steam** | Right-click **Among Us** in your Library → **Manage** → **Browse local files** |
+    | **itch.io** | Navigate to wherever you normally run `Among Us.exe` |
+    | **Epic Games** | Right-click **Among Us** → **Manage** → click the folder icon in the **Installation** box |
+    | **Microsoft Store** | Go to `C:\Program Files\WindowsApps\` and search for `Among Us.exe`; its parent folder is the directory |
+    | **Xbox App** | Right-click **Among Us** → **Manage** → **FILES** tab → **BROWSE…** → open the **Among Us** folder → open **Content** |
+  </Tab>
+
+  <Tab title="Linux (Proton/Wine)">
+    Only the **version-proxy** method (`version.dll`) is supported on Linux. Manual DLL injection is not supported.
+
+    ### Method 1: Launch Options (Recommended)
+
+    <Steps>
+      <Step title="Place version.dll in the Among Us directory">
+        Copy `version.dll` into the folder that contains `Among Us.exe`. For a Steam installation this is typically:
+
+        ```bash
+        ~/.steam/steam/steamapps/common/Among Us/
+        ```
+      </Step>
+      <Step title="Add the Wine DLL override to Steam launch options">
+        In Steam, right-click **Among Us** → **Properties** → **General** → **Launch Options** and enter:
+
+        ```bash
+        WINEDLLOVERRIDES="version=n,b" %command%
+        ```
+
+        This tells Wine to load the native (Windows) `version.dll` before the built-in Wine stub.
+      </Step>
+      <Step title="Launch the game">
+        Start Among Us from Steam. SickoMenu should load automatically.
+      </Step>
+    </Steps>
+
+    ### Method 2: protontricks winecfg (Fallback)
+
+    Use this if Method 1 does not work. You will need [protontricks](https://github.com/Matoking/protontricks) installed via your package manager.
+
+    <Steps>
+      <Step title="Confirm Proton compatibility is enabled">
+        In Steam, right-click **Among Us** → **Properties** → **Compatibility** and ensure **Force the use of a specific Steam Play compatibility tool** is checked.
+      </Step>
+      <Step title="Place version.dll in the Among Us directory">
+        Copy `version.dll` into the folder containing `Among Us.exe` (same path as Method 1).
+      </Step>
+      <Step title="Run protontricks GUI">
+        ```bash
+        protontricks --gui
+        ```
+        Select **Among Us** from the list.
+      </Step>
+      <Step title="Open the default wineprefix">
+        Click **Select the default wineprefix** → **OK**.
+      </Step>
+      <Step title="Open winecfg">
+        Click **Run winecfg** → **OK**.
+      </Step>
+      <Step title="Add the DLL override">
+        In the Wine Configuration window, go to the **Libraries** tab. Type `version` into the **New override for library** field, click **Add**, then click **Apply**.
+      </Step>
+      <Step title="Launch Among Us">
+        Close winecfg and protontricks, then start Among Us from Steam normally.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="macOS">
+    Among Us does not run natively on macOS. You must use a Windows compatibility layer. Only the **version-proxy** method is supported. The hotkey to open SickoMenu depends on your Mac model: use **Fn+Backspace** or **Command+Backspace** (⌫ on your keyboard).
+
+    ### Method 1: CrossOver
+
+    <Steps>
+      <Step title="Set up CrossOver with Steam and Among Us">
+        Install a CrossOver bottle, install Steam inside it, then install Among Us through Steam within CrossOver.
+      </Step>
+      <Step title="Open the C drive in Finder">
+        In CrossOver, click **Open C drive** (or the equivalent button for your bottle). Quit CrossOver — a Finder window will open showing the virtual C drive.
+      </Step>
+      <Step title="Place version.dll">
+        Navigate to:
+
+        ```text
+        Program Files (x86)/Steam/steamapps/common/Among Us/
+        ```
+
+        Copy `version.dll` into that folder, then reopen CrossOver.
+      </Step>
+      <Step title="Add the DLL override in Wine Configuration">
+        Go to **Configure Wine** → **Libraries**. Open the dropdown under **New Replacement for:** and search for `version`. Select it, click **Add**, then **Apply** and **OK**.
+      </Step>
+      <Step title="Start the game">
+        Launch Among Us from within CrossOver. Press **Fn+Backspace** or **Command+Backspace** to open SickoMenu, depending on your Mac model.
+      </Step>
+    </Steps>
+
+    ### Method 3: Wine via Homebrew (Terminal)
+
+    This method is recommended for users comfortable with the terminal. It creates a dedicated Wine prefix to keep Among Us isolated.
+
+    <Steps>
+      <Step title="Install Homebrew and Wine">
+        Open **Terminal** and install Homebrew if you do not already have it, then install Wine:
+
+        ```bash
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        brew install --cask wine-stable
+        ```
+      </Step>
+      <Step title="Create a dedicated Wine prefix">
+        ```bash
+        mkdir -p ~/AmongUsWine
+        WINEPREFIX=~/AmongUsWine winecfg
+        ```
+
+        In the Wine Configuration window that opens, set **Windows Version** to **Windows 10**, then close it.
+      </Step>
+      <Step title="Install Steam into the prefix">
+        Download the Steam installer from [store.steampowered.com](https://store.steampowered.com/about/), then run:
+
+        ```bash
+        WINEPREFIX=~/AmongUsWine wine ~/Downloads/SteamSetup.exe
+        ```
+
+        Follow the installer prompts.
+      </Step>
+      <Step title="Launch Steam and install Among Us">
+        ```bash
+        WINEPREFIX=~/AmongUsWine wine ~/AmongUsWine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe
+        ```
+
+        Log in and install Among Us through the Steam library.
+      </Step>
+      <Step title="Place version.dll">
+        In Finder, press **⌘+Shift+G** (Go to Folder) and enter:
+
+        ```text
+        ~/AmongUsWine/drive_c/Program Files (x86)/Steam/steamapps/common/Among Us
+        ```
+
+        Drag `version.dll` into this folder.
+      </Step>
+      <Step title="Add the DLL override">
+        ```bash
+        WINEPREFIX=~/AmongUsWine winecfg
+        ```
+
+        Go to the **Libraries** tab, type `version` in **New override for library**, click **Add**, set it to **Native (Windows)**, then **Apply** → **OK**.
+      </Step>
+      <Step title="Launch the game">
+        Start Steam from Terminal (Step 4 command), then launch Among Us from your Steam library. Use **Command+Backspace** or **Fn+Backspace** to toggle SickoMenu, depending on your Mac model.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Finding Your Among Us Directory
+
+The game directory is the folder that contains `Among Us.exe`. Refer to the table below for your platform:
+
+| Platform | How to locate it |
+|---|---|
+| **Steam** | Library → right-click **Among Us** → **Manage** → **Browse local files** |
+| **itch.io** | Navigate to wherever you installed or run `Among Us.exe` |
+| **Epic Games** | Library → right-click **Among Us** → **Manage** → folder icon in the **Installation** box |
+| **Microsoft Store** | Browse to `C:\Program Files\WindowsApps\` and search for `Among Us.exe`; its parent folder is the directory |
+| **Xbox App** | Library → right-click **Among Us** → **Manage** → **FILES** tab → **BROWSE…** → **Among Us** → **Content** |
+
+## Troubleshooting: SteamworksAuthFail Error
+
+<Tip>
+  If you see a **SteamworksAuthFail** error when launching Among Us outside of Steam (e.g., running the executable directly), fix it by creating a text file named `steam_appid.txt` next to `Among Us.exe`. Open the file and save it with the following content — no quotes:
+
+  ```text
+  943560
+  ```
+
+  Alternatively, always launch Among Us directly through Steam rather than double-clicking the executable.
+</Tip>

@@ -1,0 +1,123 @@
+---
+title: "Settings Tab: General Options, Spoofing, and Account"
+sidebarTitle: "Settings"
+description: "Configure SickoMenu's general behaviour, account spoofing, and named config profiles — all persisted to sicko-config/<name>.json in the Among Us directory."
+---
+
+The Settings tab is the central control panel for SickoMenu's global behaviour. Every option you change here is written immediately to `SickoMenu/sicko-config/<name>.json` inside your Among Us installation directory, where `<name>` matches the profile selected in the **Config** field. Multiple named configs are supported, so you can maintain separate profiles for different play styles and switch between them without restarting the game.
+
+## General
+
+The General sub-section covers quality-of-life toggles, account identity, and a handful of safety features.
+
+| Option | Description |
+|---|---|
+| **Show Keybinds** | Displays the bound key next to each toggleable option in the menu (`ShowKeybinds`). |
+| **Allow Activating Keybinds while Chatting** | Lets hotkeys fire even when the chat input box is focused (`KeybindsWhileChatting`). |
+| **Allow Clicking Through Menu UIs** | Passes mouse clicks through the SickoMenu overlay to the game underneath (`ClickThroughMenuUI`). |
+| **Extra Commands** | Enables additional slash-commands available in the in-game chat (`ExtraCommands`). |
+| **Always Show Menu on Startup** | Re-opens the menu automatically the next time Among Us launches (`ShowMenuOnStartup`). |
+| **Panic Warning** | Shows a confirmation prompt before engaging Panic Mode, preventing accidental activation (`PanicWarning`). |
+| **Config** | Selects the active named config file. Type a new name to create a fresh profile; the file is created in `sicko-config/` automatically (`selectedConfig`). |
+| **Auto-Exit Due To Low FPS** | Automatically leaves the current lobby when the frame rate drops below the configured threshold (`LeaveDueLFPS`). |
+| **Minimum FPS** | The frame-rate floor that triggers Auto-Exit; default is 15 FPS (`minFpsThreshold`). |
+| **Set As Account Name** | Writes the custom name back to your Among Us account so it persists across sessions. |
+| **Set Name** | Enables a custom in-game display name (`SetName`). |
+| **Automatically Set Name** | Applies the custom name as soon as you join a lobby, without manual intervention. |
+| **Custom Code** | Replaces the displayed lobby code with any string you choose (`customCode`; default: `SICKOS`). |
+| **Replace Streamer Mode Lobby Code** | Overrides the code hidden by Among Us's built-in streamer mode with your Custom Code value. |
+| **RGB Lobby Code** | Animates the lobby code through the full colour spectrum (`RgbLobbyCode`). |
+| **Unlock Cosmetics** | Makes all cosmetic items available in the dressing room without owning them (`UnlockCosmetics`). |
+| **Unlock All Achievements** | Grants every in-game achievement (`unlockAllAchievements`). |
+| **Allow other mod users to see you're using SickoMenu** | Broadcasts a flag over SickoChat so other SickoMenu users can identify you (`BroadcastedMod`). |
+
+## Spoofing
+
+The Spoofing sub-section lets you present a different identity to the Among Us server and to other players. All fields map directly to state variables in `Settings` (`state.hpp`).
+
+| Option | State Field | Description |
+|---|---|---|
+| **Spoof Guest Account** | `SpoofGuestAccount` | Reports your account to the server as a guest / Quick Chat-only account. |
+| **Use Custom Friend Code** | `SpoofFriendCode` / `NewFriendCode` | Broadcasts a hand-typed friend code instead of your real one. Only functional on new or guest accounts. |
+| **Spoof Level** | `SpoofLevel` / `FakeLevel` | Sends an arbitrary XP level to the server and to other players. |
+| **Spoof Platform** | `SpoofPlatform` / `FakePlatform` | Reports your client as running on a different platform (Epic Games, Steam, iOS, Android, Switch, Xbox, PlayStation, etc.). |
+| **Spoof PSN Platform ID** | `SpoofPsnId` / `FakePsnId` | Sends a custom PlayStation Network platform identifier (`uint64`). |
+| **Spoof Xbox Platform ID** | `SpoofXboxId` / `FakeXboxId` | Sends a custom Xbox Live platform identifier (`uint64`). |
+| **Reduce Anticheat While Hosting (+25 Mode)** | `SpoofModdedHost` | Broadcasts a flag that relaxes server-side validation when you are the host, enabling features that would otherwise be rejected. Also known as **+25 Mode**. |
+
+<Warning>
+**Spoof Platform** changes the platform tag the server sees for your client. Some platforms are hidden from the public matchmaking browser, so enabling this option with certain platform values may cause your lobby to become invisible to players searching through the in-game lobby list.
+
+**+25 Mode / SpoofModdedHost** only takes effect when you are the host of the lobby. Enabling it as a guest has no effect and may draw attention from server-side detection.
+</Warning>
+
+## Config file format
+
+SickoMenu stores all settings in a single flat JSON file at:
+
+```
+<Among Us install>/SickoMenu/sicko-config/<name>.json
+```
+
+A second file, `sicko-selected-config.json`, tracks which profile is currently active:
+
+```json
+{
+    "SelectedConfig": "default"
+}
+```
+
+The per-profile config file contains every setting as a top-level key. Below is a minimal representative excerpt showing the settings and keybinds sections using the actual field names written by `Settings::Save()`:
+
+```json
+{
+    "HasOpenedMenuBefore": true,
+    "ShowMenuOnStartup": true,
+    "KeyBinds": {
+        "Toggle_Menu": 46,
+        "Toggle_Radar": 45,
+        "Toggle_Console": 36,
+        "Repair_Sabotage": 34,
+        "Toggle_Noclip": 17,
+        "Toggle_Autokill": 0,
+        "Close_All_Doors": 0,
+        "Toggle_Zoom": 0,
+        "Toggle_Freecam": 0,
+        "Close_Current_Room_Door": 0,
+        "Toggle_Replay": 35,
+        "Toggle_ChatAlwaysActive": 0,
+        "Toggle_ReadGhostMessages": 0,
+        "Toggle_Hud": 0,
+        "Reset_Appearance": 0,
+        "Randomize_Appearance": 0,
+        "Complete_Tasks": 0,
+        "Toggle_Sicko": 19,
+        "Leave_Game": 0,
+        "Cancel_Start": 0
+    },
+    "ShowKeybinds": true,
+    "KeybindsWhileChatting": true,
+    "SpoofLevel": false,
+    "FakeLevel": 1,
+    "SpoofPlatform": false,
+    "FakePlatform": 0,
+    "SpoofPsnId": false,
+    "FakePsnId": 0,
+    "SpoofXboxId": false,
+    "FakeXboxId": 0,
+    "SpoofGuestAccount": false,
+    "SpoofModdedHost": false,
+    "PanicWarning": true,
+    "ExtraCommands": false,
+    "UnlockCosmetics": true,
+    "CustomCode": "SICKOS",
+    "RgbLobbyCode": false,
+    "LeaveDueLFPS": false
+}
+```
+
+Keybind values are stored as plain decimal integers representing Windows virtual key codes. `0` means the action is unbound.
+
+<Note>
+To switch between profiles without restarting the game, change the **Config** field in **Settings → General**. SickoMenu will save the current profile, load the selected one, and apply it immediately. You can keep separate configs for, for example, a clean crewmate profile and a host-utilities profile.
+</Note>

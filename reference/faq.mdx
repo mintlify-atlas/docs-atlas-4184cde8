@@ -1,0 +1,120 @@
+---
+title: "Frequently Asked Questions About SickoMenu"
+sidebarTitle: "FAQ"
+description: "Answers to the most common questions about SickoMenu installation, antivirus detection, platform support, and Among Us game compatibility."
+---
+
+SickoMenu is an open-source DLL mod for Among Us, and with any memory-modifying software comes a fair share of questions. This page collects the 15 most frequently asked questions from the community — covering everything from antivirus false positives and installation steps to game version compatibility and advanced usage.
+
+## Common Questions
+
+<Accordion title="My antivirus shows detections — is this malware?">
+No. Some detections include "gen" in the label, which is short for *generic* — meaning the scanner flagged a pattern common across many types of software. In this case, the pattern is almost certainly related to memory modification, which is inherently necessary for modding the game. Detection labels ending in "ml" come from Microsoft Defender's machine learning system, which flags files that *resemble* known malware based on behavioral patterns, even when the file is completely harmless.
+
+The compiled DLLs are built **by GitHub Actions directly from the public source code** in the repository. The build automation code is also fully visible. There is nothing hidden and nothing *could* be hidden — it is entirely open source. Review the code yourself if you are unsure.
+
+In short: the detections are a side effect of memory modification, not an indicator of malicious software.
+</Accordion>
+
+<Accordion title="What's the difference between release and debug?">
+The **debug** build provides a console window and more detailed logs — useful if you are a developer or are troubleshooting a specific, hard-to-diagnose issue. The **release** build is optimized with all debug information stripped and is what most users should download.
+
+Unless you are actively diagnosing a bug or contributing to development, choose the release version.
+</Accordion>
+
+<Accordion title="How do I install the menu?">
+First, ensure you have the **latest supported version of Among Us** installed. SickoMenu will not function correctly on an unsupported game version, and support will not be provided for unsupported versions.
+
+Once that is confirmed, download the correct DLL for your platform from the [latest GitHub release](https://github.com/g0aty/SickoMenu/releases/latest). You have two options:
+
+- **Inject** `SickoMenu.dll` using a reliable DLL injector, or
+- **Place** `version.dll` directly into your Among Us directory (the folder that contains `Among Us.exe`).
+
+Make sure to use the correct architecture (x86 for Steam/itch.io, x64 for Epic Games/Microsoft Store).
+</Accordion>
+
+<Accordion title="How do I open the menu?">
+Press the **DELETE** key on your keyboard. Note that **Backspace and Delete are not the same key** — make sure you are pressing the correct one.
+
+If your keyboard does not have a dedicated Delete key, search online for "how to press delete on [your keyboard model]."
+
+If you need to change the keybind, launch Among Us with SickoMenu loaded at least once, then open your Among Us game directory and look for `sicko-config\default.json`. In that file there is a keybinds section — values correspond to [Windows virtual key codes](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes).
+
+If the menu still does not appear, see the question below about the menu not showing after pressing Delete.
+</Accordion>
+
+<Accordion title="How do I fix the SteamworksAuthFail error?">
+This error occurs when Among Us cannot communicate with Steam. There are two fixes:
+
+1. **Launch the game through Steam** rather than double-clicking `Among Us.exe` directly.
+2. **Create a text file** named `steam_appid.txt` in the same folder as `Among Us.exe`, open it, type `943560`, and save. Do not include any quotes.
+</Accordion>
+
+<Accordion title="Where do I find the Among Us folder?">
+The location depends on your platform:
+
+- **Steam:** Right-click *Among Us* in your Library → **Manage** → **Browse local files**.
+- **Epic Games:** Right-click *Among Us* in your Library → **Manage** → click the folder icon in the *Installation* box.
+- **Microsoft Store:** Navigate to `C:\Program Files\WindowsApps\` and search for `Among Us.exe`; the folder containing it is your game directory.
+- **Xbox App:** Right-click *Among Us* in your Library → **Manage** → open the **FILES** tab → click **BROWSE…** → open the *Among Us* folder → open the *Content* folder.
+</Accordion>
+
+<Accordion title="Why is my menu not showing after I press DELETE?">
+Start by confirming you downloaded the correct DLL build for your platform (Steam/itch.io use x86; Epic Games and Microsoft Store/Xbox App use x64).
+
+**If no watermark appears on the main menu:**
+Make sure that **Disable fullscreen optimizations** is *not* checked in the properties of `Among Us.exe` in Windows Explorer. Right-click `Among Us.exe` → Properties → Compatibility tab.
+
+**If a watermark appears on the main menu but the overlay does not open:**
+Disable any third-party DirectX overlays you have running, such as the MSI Afterburner overlay. These can prevent the SickoMenu overlay from rendering. Note that the Steam overlay itself does not cause this issue.
+
+Also verify that you are on the latest supported version of Among Us and are using the [latest release of SickoMenu](https://github.com/g0aty/SickoMenu/releases/latest).
+</Accordion>
+
+<Accordion title="Is there an always impostor feature?">
+Sort of. You cannot force yourself to be Impostor if you are not the host. However, **as the host**, you can use the **Host tab** to assign any player a specific role before the match starts. This feature is only functional when you are hosting the lobby.
+</Accordion>
+
+<Accordion title="How do I run multiple instances of Among Us?">
+Open the `boot.config` file located in the `Among Us_Data` folder inside your Among Us directory, and **remove the `single_instance=` line**. Save the file and you can now launch multiple instances.
+
+If you want to join your own lobbies on official servers using a second instance, use a guest account with Quick Chat enabled.
+</Accordion>
+
+<Accordion title="Does SickoMenu support other mods?">
+No, and this is intentional. Mod support is **not planned** and will never be part of SickoMenu. Other mods may actively detect SickoMenu usage or suspicious RPCs and block you from playing. Compatibility between SickoMenu and other client-side mods is also not guaranteed.
+</Accordion>
+
+<Accordion title="How do I update the menu myself by editing source code?">
+Updating SickoMenu after a game update is a technically involved process. Here is the general workflow:
+
+1. Use [Il2CppInspectorRedux](https://github.com/LukeFZ/Il2CppInspectorRedux) for your target platform.
+2. Drag and drop `GameAssembly.dll` and `global-metadata.dat` into it.
+3. Generate the C++ scaffolding output.
+4. The `appdata` folder in the output contains the changes relevant to SickoMenu.
+5. Update the generated files to match the `#define` directives used by SickoMenu's source.
+
+Contributions back to the repository are always welcome.
+</Accordion>
+
+<Accordion title="Among Us updated — did SickoMenu update yet?">
+The team is already aware when Among Us updates. Whether an update to SickoMenu is available yet is a different matter — check the [releases page](https://github.com/g0aty/SickoMenu/releases/latest) to see the current supported version.
+
+SickoMenu is maintained voluntarily in contributors' free time. If you need the update sooner, the source is open and contributions are welcome. Please do not repeatedly ask for updates — the project is maintained on a volunteer basis and repeated requests are counterproductive.
+</Accordion>
+
+<Accordion title="What does Reduce Host Anticheat (+25 Mode) do?">
+Enabling **Reduce Host Anticheat (+25 Mode)** activates *modded protocol* (host authority mode). This reduces most anticheat enforcement in your lobby (rate limits still apply), which allows more mod features to function correctly.
+
+The trade-off is that your lobby **will not appear in the public lobby search** for unmodded players. This is expected behaviour, not a bug.
+</Accordion>
+
+<Accordion title="Can I use SickoMenu on Among Us 3D?">
+No. Among Us 3D is a completely different game from the original Among Us and SickoMenu has no support for it. There are no plans to add support for it.
+</Accordion>
+
+<Accordion title="My antivirus keeps deleting the file — how do I stop it?">
+You need to add SickoMenu's DLL to your antivirus **exclusions** or **whitelist**. Every major antivirus application includes this feature, usually found in a menu labelled *Exclusions*, *Whitelist*, or *Exceptions*.
+
+For Windows Security specifically, follow [this guide](https://www.elevenforum.com/t/add-or-remove-exclusions-for-microsoft-defender-antivirus-in-windows-11.8797/) to add a folder or file exclusion. Once excluded, the antivirus will stop automatically removing the file.
+</Accordion>

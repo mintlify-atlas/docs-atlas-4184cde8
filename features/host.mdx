@@ -1,0 +1,134 @@
+---
+title: "Host Tab: Lobby Administration and Role Management"
+sidebarTitle: "Host Tab"
+description: "The Host tab gives lobby hosts full control over role assignment, game option overrides, session flow, moderation ranks, and in-game administration."
+---
+
+The Host tab is the central administration panel for lobby owners. When you are the current session host, it gives you full control over role assignment, game options, session flow, and player moderation — covering everything from forcing specific roles onto players to overriding kill cooldowns, managing permission hierarchies via ranked moderation, and saving reusable configuration presets. Some features remain visible to all players regardless of host status, but the majority require you to be the active host to take effect.
+
+<Note>
+  Most features in the Host tab require you to be the current session host. Joining a lobby as a non-host player will still display the tab and its controls, but host-authoritative actions will have no effect. A small subset of features — such as viewing role information — are accessible to all players.
+</Note>
+
+## Utils
+
+The Utils subsection handles everything related to roles, session flow, and runtime game rule overrides.
+
+### Role Configuration
+
+| Feature | Description |
+|---|---|
+| **Choose Roles** | Manually assign specific roles to each player before the game starts |
+| **Disable Role Selection** | Locks the role list so players cannot choose preferred roles in the lobby |
+| **Randomize Roles** | Randomly redistributes all role assignments across connected players |
+| **Hide Roles List** | Hides the visible role list from players in the lobby screen |
+
+#### Custom Impostor Amount
+
+Override the number of impostors beyond the vanilla maximum:
+
+- **Impostor Count** — set the exact number of impostors for the next game
+- **Always Role** — force a specific role to always be assigned to at least one player
+
+### Session Flow Controls
+
+| Feature | Description |
+|---|---|
+| **Force Start of Game** | Immediately starts the game regardless of the ready-state of connected players |
+| **Cancel Start of Game** | Aborts a game that is currently counting down to launch; also available as the **Cancel Start Game** keybind |
+| **Always Allow Start Button** | Keeps the start button enabled even when the minimum player count has not been reached |
+| **Modify Start Countdown** | Changes the duration of the pre-game countdown timer |
+
+### In-Game Rule Overrides
+
+These toggles modify the core rules of the session while a game is in progress:
+
+| Feature | Description |
+|---|---|
+| **Disable Meetings** | Prevents emergency meetings and body reports from being called |
+| **Disable Sabotages** | Blocks all impostors from triggering sabotages for the duration of the round |
+| **Disable All Votekicks** | Prevents any player from initiating a votekick |
+| **Disable Game Ending** | Keeps the game running even after a win condition would normally be met |
+
+### Direct Actions
+
+| Feature | Description |
+|---|---|
+| **End Game** | Immediately ends the current round with a selectable win reason |
+| **Spam Moving Platform** | Repeatedly triggers the moving platform mechanic on The Airship |
+| **End Meeting** | Forcibly closes the current emergency meeting |
+
+### Appearance and Kill Controls
+
+| Feature | Description |
+|---|---|
+| **Force Color for Everyone** | Sets all players to a chosen color simultaneously |
+| **Unlock Kill Button** | Makes the kill button available outside of its normal role/phase restrictions |
+| **Kill While Vanished** | Allows kills to be performed while the player is in a vanished/invisible state |
+| **Bypass Guardian Angel Protections** | Causes kills to succeed even when the target is protected by a Guardian Angel |
+| **Allow Killing in Lobbies** | Enables the kill button while in the pre-game lobby |
+
+### Game Mode and Lobby Settings
+
+| Feature | Description |
+|---|---|
+| **Game Mode** | Switches between available game modes (e.g., Classic, Hide and Seek) |
+| **Game Duration** | Sets a custom time limit for the round |
+| **Spectator Mode** | Enables spectator mode so that the host can observe without participating |
+| **Show Lobby Timer** | Displays a countdown timer in the lobby visible to all players |
+| **Auto Start Game** | Automatically starts the game when all connected players are ready |
+
+---
+
+## Settings
+
+The Settings subsection manages persistent host configuration and the full suite of standard game options.
+
+### Host Presets
+
+Host Presets let you save and reload your entire host configuration — including all game option values — under a named profile. This means you can quickly switch between, for example, a "casual" lobby setup and a "competitive" one without manually adjusting every slider.
+
+<Tip>
+  Use Host Presets to save your current game settings as a named preset before experimenting with unusual configurations. You can recall the saved preset at any time from the same panel, instantly restoring every option to its saved state.
+</Tip>
+
+### Game Options
+
+The Game Options section exposes every standard game option the host can control, driven by SickoMenu's internal `GameOptions` class. This covers the full range of numeric and boolean options that normally appear in the vanilla options screen, plus several that are ordinarily hidden or capped:
+
+- Player movement speed multiplier
+- Kill cooldown duration
+- Guardian Angel protection cooldown
+- Common, long, and short task counts
+- Visual tasks on/off
+- Anonymous voting, confirm ejects, and related vote settings
+- Player vision and impostor vision multipliers
+- All role-specific count and chance sliders (Shapeshifter, Phantom, Viper, Scientist, Tracker, Noisemaker, Engineer, Detective, Judge, Guardian Angel)
+
+Changes made here are broadcast to all connected players as authoritative game option updates.
+
+---
+
+## Moderation
+
+The Moderation subsection manages the permission infrastructure that governs which players are trusted to use host-level and SMAC-enforced features.
+
+### Roles
+
+The Roles panel lets you assign named moderation roles to players by their friend code. Roles group permissions together so that a trusted moderator automatically inherits all the commands associated with their role without needing individual permission grants.
+
+### Ranks
+
+Ranks define a hierarchical permission system layered on top of roles. Each rank level determines the scope of SMAC-enforced features and host-delegated commands a player can access:
+
+- Higher-ranked players can perform more powerful moderation actions
+- Rank checks are evaluated automatically when a player issues a command or triggers a restricted feature
+- Friend codes are used as the persistent identifier so rank assignments survive player name changes
+
+---
+
+## +25 Mode / Reduce Host Anticheat
+
+<Note>
+  Enabling **Reduce Anticheat While Hosting (+25 Mode)** activates a modded networking protocol that bypasses several of the vanilla anticheat checks. This makes it possible to host lobbies with more than the standard 15-player cap and to use features that would otherwise be blocked by server-side validation. The trade-off is that your lobby will be hidden from unmodded players in the public lobby browser — only players running a compatible mod client will be able to discover and join the session through the normal search interface.
+</Note>

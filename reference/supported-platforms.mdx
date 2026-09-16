@@ -1,0 +1,63 @@
+---
+title: "Supported Platforms and Among Us Version Compatibility"
+sidebarTitle: "Platforms"
+description: "A full breakdown of which game stores, operating systems, and Among Us versions SickoMenu supports, including DLL selection guidance."
+---
+
+SickoMenu targets the **PC version of Among Us** exclusively. Support varies by distribution platform, operating system, and CPU architecture — using the wrong configuration is the most common reason the mod fails to load. This page details exactly what is and is not supported so you can get up and running without guesswork.
+
+## Platform Support
+
+The following table summarises the support status for each platform where Among Us is available:
+
+| Platform | Status | Architecture |
+|---|---|---|
+| Steam | ✅ Supported | x86 |
+| itch.io | ✅ Supported | x86 |
+| Epic Games | 🟡 Experimental | x64 |
+| Microsoft Store / Xbox App | 🟡 Experimental | x64 |
+| Cracked copies | ❓ Occasional | varies |
+| iOS / iPadOS / Android | ❌ Not Supported | — |
+| Nintendo Switch / Xbox / PlayStation | ❌ Not Supported | — |
+
+Steam and itch.io are the primary supported platforms and receive the most testing. Epic Games and Microsoft Store / Xbox App builds are x64 and considered experimental — they may work but receive less maintenance attention. Cracked copies have no guaranteed compatibility. Mobile and console versions of the game cannot run DLL mods and are not supported.
+
+## Operating System Support
+
+### Windows
+Windows is the primary and fully supported operating system. Both injection (`SickoMenu.dll`) and the version proxy (`version.dll`) methods are available.
+
+### Linux (Proton / Wine)
+Linux is supported via the **version proxy method only** (`version.dll`). DLL injection is not supported under Proton or Wine. Place `version.dll` in your Among Us directory and add `WINEDLLOVERRIDES="version=n,b" %command%` to your Steam launch options.
+
+### macOS (CrossOver / Wine)
+macOS is supported via the **version proxy method only** (`version.dll`). Place `version.dll` in your Among Us installation directory and configure your Wine environment to load it as a native override.
+
+<Tip>
+On macOS, the hotkey to open SickoMenu depends on your Mac model. Use either **Fn + Backspace** or **Command + Backspace** (Backspace is the ⌫ key). The standard DELETE key shortcut does not apply on macOS.
+</Tip>
+
+## DLL Selection Guide
+
+Choosing the wrong DLL for your platform is the single most common setup mistake. Use the following table to determine which file to use:
+
+| Platform | DLL file | Notes |
+|---|---|---|
+| Steam | `SickoMenu.dll` (x86) or `version.dll` (x86) | Place `version.dll` in the game directory, or inject `SickoMenu.dll` |
+| itch.io | Same as Steam | Navigate to wherever `Among Us.exe` lives |
+| Epic Games | `SickoMenu.dll` (x64) or `version.dll` (x64) | Use the x64 build — Epic uses a 64-bit binary |
+| Microsoft Store / Xbox App | `SickoMenu.dll` (x64) or `version.dll` (x64) | Use the x64 build |
+
+<Warning>
+Using an x86 DLL with an x64 game build (or vice versa) will cause SickoMenu to **silently fail** — the mod will not load and no error will be displayed. Always match the DLL architecture to your platform.
+</Warning>
+
+## Game Version Compatibility
+
+SickoMenu targets a specific version of Among Us at any given time. Always use the **latest supported version** of Among Us. The currently supported Among Us version is listed on the [GitHub releases page](https://github.com/g0aty/SickoMenu/releases/latest) — check there before reporting issues.
+
+If Among Us has recently updated and SickoMenu has not yet caught up, the mod may not function correctly on the new version. See the [FAQ](/reference/faq) for guidance on what to do while waiting for an update.
+
+<Note>
+Among Us 3D is a completely separate game from the original Among Us and is **not supported** by SickoMenu. There are no plans to add support for it.
+</Note>

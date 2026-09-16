@@ -1,0 +1,132 @@
+---
+title: "Theme Customisation: Colors, Gradients, and UI Options"
+sidebarTitle: "Themes"
+description: "Personalise SickoMenu's ImGui overlay with a per-config color picker, gradient mode, RGB cycling, opacity control, UI scale, and per-role color overrides."
+---
+
+SickoMenu renders its overlay with ImGui and exposes a full custom theme system through the **Settings → Customization** sub-tab. Every colour, opacity, scale, and animation value is persisted to your active config file in `SickoMenu/sicko-config/<name>.json`, so each named profile can carry its own visual identity. The settings described below are all read and written by `Settings::Load()` / `Settings::Save()` in `state.cpp`.
+
+## Menu Theme Color
+
+Click the colour swatch next to **Menu Theme Color** to open the ImGui colour picker. The selected colour is stored as four normalised float components (`MenuThemeColor_R`, `MenuThemeColor_G`, `MenuThemeColor_B`, `MenuThemeColor_A`). This colour is used for the header bar, highlighted borders, and active toggle indicators throughout the overlay.
+
+## Gradient Theme
+
+Enable **Gradient Theme** (`GradientMenuTheme`) to blend smoothly between two independently chosen colours across the menu header instead of using a flat tint. The two endpoint colours are configured separately via the **Gradient Color 1** and **Gradient Color 2** pickers, stored as `MenuGradientColor1_R/G/B/A` and `MenuGradientColor2_R/G/B/A`.
+
+## RGB Menu Theme
+
+Enabling **RGB Menu Theme** (`RgbMenuTheme`) ignores the manually picked colour and instead cycles the theme accent through the full HSV colour wheel over time, producing a continuously animated rainbow effect. RGB mode overrides both the flat colour and gradient settings while it is active.
+
+## Reset Menu Theme
+
+**Reset Menu Theme** reverts `MenuThemeColor` to SickoMenu's factory default of a vivid pink-red (`R=1.0, G=0.0, B=0.424, A=1.0`, approximately `#FF006C`). Use this if a custom colour accidentally makes the overlay hard to read.
+
+## Match Background with Theme
+
+When **Match Background with Theme** is enabled (`MatchBackgroundWithTheme`), SickoMenu tints the game's rendered background to loosely match the active theme colour, creating a more cohesive look between the overlay and the gameplay canvas beneath it.
+
+## Opacity
+
+The **Opacity** slider controls the global alpha of the entire SickoMenu ImGui context. Reducing it makes the overlay semi-transparent so you can see the game through the menu. The value feeds directly into ImGui's style alpha and affects every window, popup, and tooltip rendered by the mod.
+
+## Dark Game Theme / Custom Game Theme
+
+- **Dark Game Theme** (`DarkMode`) switches the Among Us UI's internal colour palette to dark variants, affecting in-game text and panel backgrounds independently of the SickoMenu overlay itself.
+- **Custom Game Theme** (`CustomGameTheme`) allows you to set arbitrary text and background colours for the in-game UI via the **Game Text Color** and **Game Background Color** pickers. These are stored as `GameTextColor_R/G/B` and `GameBgColor_R/G/B`.
+
+## Change Chat Font
+
+The **Change Chat Font** option (`ChatFont`) replaces the font used to render in-game chat messages. Select from the following built-in choices via the `ChatFontType` index:
+
+| Index | Font Name |
+|---|---|
+| 0 | Barlow-Italic |
+| 1 | Barlow-Medium |
+| 2 | Barlow-Bold |
+| 3 | Barlow-SemiBold |
+| 4 | Barlow-SemiBold (Masked) |
+| 5 | Barlow-ExtraBold |
+| 6 | Barlow-BoldItalic |
+| 7 | Barlow-BoldItalic (Masked) |
+| 8 | Barlow-Black |
+| 9 | Barlow-Light |
+| 10 | Barlow-Regular |
+| 11 | Barlow-Regular (Masked) |
+| 12 | Barlow-Regular (Outline) |
+| 13 | Brook |
+| 14 | LiberationSans |
+| 15 | NotoSans |
+| 16 | VCR |
+| 17 | CONSOLA |
+| 18 | digital-7 |
+| 19 | OCRAEXT |
+| 20 | DIN\_Pro\_Bold\_700 |
+
+## Show FPS / Show Time
+
+- **Show FPS** (`ShowFps`) draws a live frames-per-second counter in the corner of the screen.
+- **Show Time** (`ShowTime`) overlays the current local time. You can configure the offset (`TimeOffsetMinutes`), 12/24-hour format (`Use12HourFormat`), seconds display (`ShowSeconds`), leading zero for hours (`UseLeadingZeroForHours`), and custom AM/PM strings (`AmString`, `PmString`).
+
+## Light Mode
+
+**Light Mode** (`LightMode`) inverts the ImGui colour scheme from its default dark palette to a light one. This can improve readability when streaming or playing in a brightly lit environment where the standard dark overlay blends with a bright monitor.
+
+## Show UI Borders
+
+**Show UI Borders** (`ShowUiBorders`) draws outlines around each ImGui child window and panel within the overlay, making the layout boundaries clearly visible. Disable it for a cleaner, borderless look.
+
+## Menu Scale
+
+Two settings work together to control the overall size of the overlay:
+
+- **Adjust By DPI** (`AdjustByDPI`) — when enabled, SickoMenu reads the current monitor DPI and automatically scales all ImGui elements to maintain a consistent physical size across different screen resolutions and densities.
+- **DPI Scale** (`dpiScale`) — a manual float multiplier applied on top of (or instead of) the DPI-automatic value. Increase it to make the entire overlay larger; decrease it to shrink it.
+
+## Disable Animations / Animation Speed / Rounding Radius Multiplier
+
+- **Disable Animations** (`DisableAnimations`) turns off all transition effects — tab switches, window open/close fades, and hover highlights — for a snappier feel on lower-end hardware.
+- **Animation Speed** (`AnimationSpeed`) scales how quickly transitions play when animations are enabled. Values above `1.0` accelerate them; values below `1.0` slow them down.
+- **Rounding Radius Multiplier** (`RoundingRadiusMultiplier`) scales the corner radius applied to all ImGui windows and buttons. `0.0` produces perfectly square corners; `2.0` maximises rounding. The value is clamped to `[0.0, 2.0]`.
+
+## Role Colors
+
+The **Role Colors** section exposes individual colour pickers for every role recognised by SickoMenu. These colours are used in the ESP overlay, the player list, the radar, and anywhere else role information is displayed. All values are stored as RGBA float components in the config file:
+
+| Role | Config Keys (prefix `_R/G/B/A`) |
+|---|---|
+| Crewmate | `CrewmateColor` |
+| Crewmate Ghost | `CrewmateGhostColor` |
+| Impostor | `ImpostorColor` |
+| Impostor Ghost | `ImpostorGhostColor` |
+| Engineer | `EngineerColor` |
+| Scientist | `ScientistColor` |
+| Guardian Angel | `GuardianAngelColor` |
+| Shapeshifter | `ShapeshifterColor` |
+| Noisemaker | `NoisemakerColor` |
+| Tracker | `TrackerColor` |
+| Phantom | `PhantomColor` |
+| Detective | `DetectiveColor` |
+| Viper | `ViperColor` |
+| Judge | `JudgeColor` |
+
+## Other Colors
+
+The **Other Colors** section lets you override the tint used for specific UI elements in the player list and HUD overlays:
+
+| Element | Config Keys (prefix `_R/G/B/A`) |
+|---|---|
+| Host indicator | `HostColor` |
+| Player ID label | `PlayerIdColor` |
+| Level label | `LevelColor` |
+| Platform label | `PlatformColor` |
+| Mod usage indicator | `ModUsageColor` |
+| Name-checker flag | `NameCheckerColor` |
+| Friend code label | `FriendCodeColor` |
+| Dater name highlight | `DaterNamesColor` |
+| Lobby code display | `LobbyCodeColor` |
+| Age label | `AgeColor` |
+
+<Tip>
+Because every theme value is stored in the per-profile JSON config, you can build a complete theme by hand and copy the relevant keys into any other config file or share them with other SickoMenu users. Back up your preferred `sicko-config/<name>.json` and drop it into the same folder on another machine to reproduce the exact same colours, scale, and font choices instantly.
+</Tip>

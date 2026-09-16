@@ -1,0 +1,142 @@
+---
+title: "SickoMenu Architecture: Hooks, RPC, Events, and GUI"
+sidebarTitle: "Architecture"
+description: "SickoMenu's internal architecture: DLL entry point, IL2CPP runtime init, Detours-based hooks, RPC wrappers, event system, and ImGui/DirectX 11 renderer."
+---
+
+SickoMenu is structured into five main layers: **framework** (IL2CPP initialisation and runtime helpers), **hooks** (Detours-based method detours), **rpc** (typed network RPC wrappers), **events** (an observer-style game event system), and a **GUI** layer built on ImGui with a DirectX 11 backend. Supporting these layers are the **user/** application-logic directory, the **includes/** vendored-dependency tree, and the **appdata/** directory of IL2CPP-generated bindings.
+
+## Directory Layout
+
+| Directory | Purpose |
+|---|---|
+| `framework/` | `DllMain` entry point, IL2CPP runtime initialisation (`il2cpp-init`), IL2CPP method-resolution and string-conversion helpers (`il2cpp-helpers`), precompiled header (`pch-il2cpp`), and the version-proxy stub (`version.cpp`, `version.def`) |
+| `hooks/` | Detours-based detours on individual game class methods. Each `.cpp` file corresponds to a specific game class: `PlayerControl`, `InnerNetClient`, `HudManager`, `MeetingHud`, `ShipStatus`, `AirshipStatus`, `FungleShipStatus`, `PolusShipStatus`, `LobbyBehaviour`, `Camera`, `Chat`, `Doors`, `EOSManager`, `ExileController`, `KeyboardJoystick`, `NoShadowBehaviour`, `PlainDoor`, `PlayerBanData`, `PlayerPhysics`, `PlayerStorageManager`, `RoleManager`, `SabotageSystemType`, `SaveManager`, `SceneManager`, `UnityDebug`, `AccountManager`, `Dleks`, `GameOptionsManager`, and more |
+| `rpc/` | Typed C++ classes implementing the `RPCInterface` virtual interface. Each class encapsulates one network RPC: `RpcMurderPlayer`, `RpcSetRole`, `RpcCompleteTask`, `RpcSetName`, `RpcSetColor`, `RpcSnapTo`, `RpcCloseDoorsOfType`, `RpcOpenDoorsOfType`, `RpcUpdateSystem`, `RpcUsePlatform`, `RpcShapeshift`, `RpcVent`, `RpcEndGame`, `RpcVotePlayer`, `RpcSendChat`, `RpcRevive`, `RpcSetLevel`, `RpcProtectPlayer`, `RpcReportBody`, `RpcEndMeeting`, `CmdCheckMurder`, and many others |
+| `events/` | Observer-style typed event structs derived from `EventInterface`. Hooks emit these events; subsystems such as the replay recorder, ESP overlay, and SMAC anti-cheat scanner subscribe to them. Events include `KillEvent`, `VentEvent`, `WalkEvent`, `CastVoteEvent`, `ReportDeadBodyEvent`, `TaskCompletedEvent`, `CheatDetectedEvent`, `DisconnectEvent`, `ProtectPlayerEvent`, `ShapeShiftEvent`, `SabotageEvent`, `PhantomEvent`, and `ModerationEvent` |
+| `gui/` | ImGui render loop (`Renderer.cpp`, `RenderCmd.cpp`), ESP overlay (`esp.cpp`), radar (`radar.cpp`), replay (`replay.cpp`), theme engine (`theme.cpp`), in-game console (`console.cpp`), and per-tab source files in `gui/tabs/` (About, Debug, Doors, ESP, Game, Host, Players, Radar, Replay, Sabotage, Self, Settings, Tasks) |
+| `user/` | Application-level logic: `state.hpp` / `state.cpp` (the `Settings` class and JSON config persistence), `utility.h` / `utility.cpp` (helper functions, `PlayerSelection`, `GameOptions`, `RoleOptions`), `game.h` / `game.cpp` (game-state accessors), `keybinds.h` / `keybinds.cpp`, `achievements.hpp` / `achievements.cpp`, `profiler.h` / `profiler.cpp`, `logger.h` / `logger.cpp`, `resources.h` / `resources.cpp` |
+| `includes/` | Vendored third-party dependencies: ImGui (`imgui/`), Microsoft Detours (`detours/`), DirectX 11 setup helpers (`directx11.cpp/.h`), `stb_image.h`, `nlohmann/json.hpp`, `crc32` |
+| `appdata/` | IL2CPP-generated bindings for the current Among Us version: `il2cpp-classes.h`, `il2cpp-functions.h`, `il2cpp-functions.cpp`, `il2cpp-types.h`, `il2cpp-api-functions.h`, `il2cpp-translations.h` |
+
+## IL2CPP Initialisation Flow
+
+The startup sequence proceeds as follows once the DLL is loaded by the game process:
+
+1. **`DllMain` (`DLL_PROCESS_ATTACH`)** — `framework/dllmain.cpp` calls `DisableThreadLibraryCalls`, then spawns a new thread. In normal DLL mode the thread entry point is `Run`; in version-proxy mode (`_VERSION` preprocessor flag) it is `Load`, which first forwards calls to the original `version.dll`.
+2. **`init_il2cpp()`** — the spawned thread calls into `framework/il2cpp-init.cpp`, which resolves the IL2CPP runtime inside `GameAssembly.dll` by walking the module's export table and locating key IL2CPP API functions (`il2cpp_domain_get`, `il2cpp_thread_attach`, `il2cpp_class_from_name`, etc.).
+3. **Hook installation** — `DetourInitilization()` (`hooks/_hooks.cpp`) uses Microsoft Detours to install all method detours in a single `DetourTransactionBegin` / `DetourTransactionCommit` transaction.
+4. **DirectX 11 hook** — the GUI renderer (`gui/Renderer.cpp`) hooks `IDXGISwapChain::Present` to intercept the game's render loop and inject ImGui draw calls.
+5. **Render loop begins** — each frame `Menu::Render()` (`gui/menu.cpp`) evaluates which tabs are open and dispatches to the appropriate per-tab render functions.
+
+```
+DllMain (DLL_PROCESS_ATTACH)
+  └─ CreateThread → Run / Load
+       ├─ init_il2cpp()          # resolve IL2CPP runtime
+       ├─ DetourInitilization()  # install all Detours hooks
+       └─ Hook IDXGISwapChain::Present
+            └─ Menu::Render() per frame
+```
+
+## Hooks
+
+Every file under `hooks/` targets a specific game class. The header `hooks/_hooks.h` declares every hook function with the signature pattern `d<ClassName>_<MethodName>`, for example:
+
+```cpp
+void dHudManager_Update(HudManager* __this, MethodInfo* method);
+void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target,
+                                  MurderResultFlags__Enum resultFlags, MethodInfo* method);
+void dMeetingHud_CastVote(MeetingHud* __this, PlayerId playerId,
+                           PlayerId suspectIdx, MethodInfo* method);
+```
+
+Hook bodies can read and modify game state directly through IL2CPP object pointers, call RPC wrappers, and emit events. `DetourInitilization()` and `DetourUninitialization()` in `hooks/_hooks.cpp` manage the full Detours transaction lifecycle.
+
+## RPC System
+
+All RPC operations are modelled as classes that inherit from `RPCInterface`:
+
+```cpp
+class RPCInterface {
+public:
+    virtual ~RPCInterface() {}
+    virtual void Process() = 0;
+};
+```
+
+Callers construct an RPC object and call `Process()` to dispatch it. The RPC classes construct and send Among Us network messages directly using IL2CPP function pointers resolved from `appdata/il2cpp-functions.h`, bypassing the client-side validation that normally gates these calls. Example classes:
+
+```cpp
+class RpcMurderPlayer : public RPCInterface {
+    PlayerControl* Player;
+    PlayerControl* target;
+    bool success;
+public:
+    RpcMurderPlayer(PlayerControl* Player, PlayerControl* target, bool success = true);
+    virtual void Process() override;
+};
+
+class RpcSetRole : public RPCInterface {
+    PlayerControl* Player;
+    RoleTypes__Enum Role;
+public:
+    RpcSetRole(PlayerControl* player, RoleTypes__Enum role);
+    virtual void Process() override;
+};
+```
+
+`rpc/_rpc.h` also declares `HandleRpc` and `SMAC_HandleRpc` — the inbound RPC handler and the SMAC (SickoMenu Anti-Cheat) scanner that inspects incoming RPCs for anomalous patterns.
+
+## Event System
+
+Hooks emit typed events by constructing event objects and appending them to a shared log. All event types derive from `EventInterface`:
+
+```cpp
+class EventInterface {
+protected:
+    EVENT_TYPES eventType;
+    EVENT_PLAYER source;
+    std::chrono::system_clock::time_point timestamp;
+public:
+    virtual void Output() = 0;
+    virtual void ColoredEventOutput() = 0;
+    EVENT_TYPES getType() const;
+    const EVENT_PLAYER& getSource() const;
+    const std::chrono::system_clock::time_point& GetTimeStamp() const;
+};
+```
+
+The full set of event types is defined by the `ALL_EVENTS` macro in `events/_events.h`:
+
+| Enum value | Display name | Emitted by |
+|---|---|---|
+| `EVENT_KILL` | Kill | `dPlayerControl_MurderPlayer` |
+| `EVENT_VENT` | Vent | `dVent_EnterVent`, `dVent_ExitVent` |
+| `EVENT_TASK` | Task | `dPlayerControl_CompleteTask` |
+| `EVENT_REPORT` | Report | `dPlayerControl_CmdReportDeadBody` |
+| `EVENT_MEETING` | Meeting | `dPlayerControl_StartMeeting` |
+| `EVENT_VOTE` | Vote | `dMeetingHud_CastVote` |
+| `EVENT_CHEAT` | Cheat | SMAC detection logic |
+| `EVENT_DISCONNECT` | Disconnect | `dAmongUsClient_OnPlayerLeft` |
+| `EVENT_SHAPESHIFT` | Shapeshift | `dPlayerControl_Shapeshift` |
+| `EVENT_PROTECTPLAYER` | Protect | `dPlayerControl_ProtectPlayer` |
+| `EVENT_PHANTOM` | Vanish/Appear | Phantom role hooks |
+| `EVENT_SABOTAGE` | Sabotage | Sabotage system hooks |
+| `EVENT_WALK` | Walk | `dCustomNetworkTransform_SnapTo` |
+| `EVENT_MODERATION` | Moderation | Host moderation actions |
+
+The **Replay** tab, **ESP** overlay, and **SMAC** subsystem all consume these events from the shared log.
+
+## Settings Persistence
+
+The `Settings` class in `user/state.hpp` holds all mod configuration — feature toggles, host presets, cosmetic presets, keybinds, SMAC options, and more. On save, the object is serialised to JSON using **nlohmann/json** and written to:
+
+```
+<Among Us directory>/sicko-config/<config-name>.json
+```
+
+Multiple named config profiles are supported; the active profile is selected in-game. `GetAllConfigs()` and `CheckConfigExists()` in `utility.h` manage profile discovery and validation.
+
+<Note>
+  The `appdata/` directory contains C++ header and source files that are **generated from the game binary** using [Il2CppInspectorRedux](https://github.com/LukeFZ/Il2CppInspectorRedux). They encode every class layout, method pointer, and type definition present in the current version of Among Us. Whenever Among Us ships an update that changes its IL2CPP metadata, these files must be regenerated from the new `GameAssembly.dll` and `global-metadata.dat` before the project will compile correctly against the updated game.
+</Note>

@@ -1,0 +1,89 @@
+{
+  "projectType": "general",
+  "projectName": "SickoMenu",
+  "projectDescription": "A powerful Among Us utility mod (DLL) for Windows that injects via proxy or injector to add an in-game ImGui menu with hundreds of features covering ESP, radar, replay, player management, sabotage, task automation, host controls, and more — intended for educational and private-lobby use.",
+  "theme": "aspen",
+  "primaryColor": "#5c64f4",
+  "lightColor": "#acb4fc",
+  "darkColor": "#ffffff",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "hotkeys"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/self",
+              "features/game",
+              "features/players",
+              "features/esp-radar-replay",
+              "features/tasks-sabotage-doors",
+              "features/host"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/settings",
+              "configuration/keybinds",
+              "configuration/themes"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "development/building",
+              "development/architecture",
+              "development/contributing"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/faq",
+              "reference/supported-platforms",
+              "reference/disclaimer"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "ESP (Entity Awareness) — bounding boxes, tracers, distances, and role-based overlays for all players",
+    "Radar — live minimap with player positions, dead bodies, ghosts, and click-to-teleport",
+    "Replay System — records and plays back player movements with a scrubable timeline",
+    "Self Tab — NoClip, Freecam, Zoom, God Mode, role selection, cosmetic presets, teleport, and visual toggles",
+    "Players Tab — per-player actions: kill, teleport, votekick, shift outfit, set role, spectate, and trolling options",
+    "Game/Host Tab — lobby management, role assignment, anticheat (SMAC), moderation ranks, custom game options",
+    "Sabotage & Doors — trigger/repair any sabotage, pin/unpin doors, auto-repair, and spam controls",
+    "Tasks Tab — complete all tasks, bypass visual task checks, play animations, task enforcer",
+    "Spoofing & Account — spoof level, platform, friend code, PSN/Xbox IDs, and guest accounts",
+    "Customizable Keybinds — all hotkeys configurable via JSON config or in-game Settings → Keybinds",
+    "Version Proxy DLL — auto-loads without an injector when placed in the Among Us directory",
+    "Multi-platform Support — Steam (x86), itch.io, Epic Games (x64), Microsoft Store/Xbox (x64)"
+  ],
+  "publicApiSurface": [
+    "SickoMenu.dll — standard DLL injected via any injector (x86 for Steam/itch, x64 for Epic/Xbox/MS Store)",
+    "version.dll — proxy DLL placed in Among Us directory; auto-loaded by the game on startup",
+    "sicko-config/<name>.json — JSON configuration file storing all settings and keybind virtual key codes",
+    "KeyBinds::Config struct — VK_* fields for every toggle (menu, radar, console, noclip, panic, etc.)",
+    "Settings class — serialized/deserialized state for all menu toggles, spoofing options, and UI preferences",
+    "Events system (_events.h) — KillEvent, VentEvent, CastVoteEvent, WalkEvent, ReportDeadBodyEvent, etc.",
+    "RPC wrappers (rpc/) — RpcMurderPlayer, RpcSetRole, RpcCompleteTask, RpcSetName, RpcSetColor, RpcSnapTo, etc.",
+    "GameOptions class — typed accessors/setters wrapping IGameOptions (SetByte, SetFloat, SetBool, GetInt, etc.)",
+    "Utility functions (utility.h) — GetAllPlayerControl, RepairSabotage, CompleteAllTasks, GetPlayerColor, etc.",
+    "il2cpp helpers (framework/) — il2cpp-init, il2cpp-helpers for resolving game types and method pointers",
+    "Debug tab — profiler, RPC queue clearing, occlusion culling toggle (Debug builds only)",
+    "SickoChat (/sc <message>) — in-game chat command for broadcasting custom messages"
+  ]
+}

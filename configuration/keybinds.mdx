@@ -1,0 +1,100 @@
+---
+title: "Keybind Configuration: Virtual Key Codes and JSON Editing"
+sidebarTitle: "Keybinds"
+description: "Assign SickoMenu hotkeys from the in-game Settings → Keybinds tab or by editing sicko-config/default.json with Windows virtual key code hex values."
+---
+
+Every SickoMenu action that can be triggered from the keyboard is fully customisable. You can reassign bindings either from the **Settings → Keybinds** tab inside the menu overlay, or by editing the `KeyBinds` object directly in your active config file at `SickoMenu/sicko-config/default.json` (or whatever profile name you have selected). Changes saved in-game are written to disk immediately; changes made to the JSON file are picked up the next time the config is loaded.
+
+## In-game configuration
+
+Open the menu, navigate to **Settings**, then select the **Keybinds** sub-tab. Each row shows an action name, the currently bound key, and an edit button:
+
+1. Click the **edit** button on the row you want to change. The row will enter a listening state.
+2. Press the desired key on your keyboard. SickoMenu captures the Windows virtual key code for that key and saves it.
+3. To **unbind** an action entirely, assign it `0x00`. The row will show `NONE` and the action will only be reachable through the menu itself.
+
+The **Show Keybinds** toggle in **Settings → General** controls whether the bound key name appears next to toggleable options throughout the rest of the menu — it does not affect whether the binds are active.
+
+## JSON configuration
+
+Keybinds are stored under the `"KeyBinds"` key in your config file as plain decimal integers. The table below maps each `KeyBinds::Config` struct field to its default binding and the corresponding decimal value. You can also edit the file directly with hex values if your JSON editor supports it (most do not — use decimal).
+
+```json
+"KeyBinds": {
+    "Toggle_Menu": 46,
+    "Toggle_Radar": 45,
+    "Toggle_Console": 36,
+    "Repair_Sabotage": 34,
+    "Toggle_Noclip": 17,
+    "Toggle_Autokill": 0,
+    "Close_All_Doors": 0,
+    "Toggle_Zoom": 0,
+    "Toggle_Freecam": 0,
+    "Close_Current_Room_Door": 0,
+    "Toggle_Replay": 35,
+    "Toggle_ChatAlwaysActive": 0,
+    "Toggle_ReadGhostMessages": 0,
+    "Toggle_Hud": 0,
+    "Reset_Appearance": 0,
+    "Randomize_Appearance": 0,
+    "Complete_Tasks": 0,
+    "Toggle_Sicko": 19,
+    "Leave_Game": 0,
+    "Cancel_Start": 0
+}
+```
+
+The table below lists every field, its default binding, and what it does:
+
+| JSON Field | Default VK | Key Name | Action |
+|---|---|---|---|
+| `Toggle_Menu` | `0x2E` (46) | DEL | Show / hide the SickoMenu overlay |
+| `Toggle_Radar` | `0x2D` (45) | INS | Show / hide the radar minimap |
+| `Toggle_Console` | `0x24` (36) | HOME | Show / hide the debug console |
+| `Repair_Sabotage` | `0x22` (34) | PG DN | Instantly repair all active sabotages |
+| `Toggle_Noclip` | `0x11` (17) | CTRL | Enable / disable no-clip movement |
+| `Toggle_Autokill` | `0x00` | — | Enable / disable auto-kill |
+| `Close_All_Doors` | `0x00` | — | Close every door on the current map |
+| `Toggle_Zoom` | `0x00` | — | Enable / disable zoom-out |
+| `Toggle_Freecam` | `0x00` | — | Enable / disable free camera |
+| `Close_Current_Room_Door` | `0x00` | — | Close only the door of the room you are in |
+| `Toggle_Replay` | `0x23` (35) | END | Show / hide the movement replay overlay |
+| `Toggle_ChatAlwaysActive` | `0x00` | — | Keep the chat button always visible |
+| `Toggle_ReadGhostMessages` | `0x00` | — | Read messages sent by ghost players |
+| `Toggle_Hud` | `0x00` | — | Show / hide the Among Us HUD |
+| `Reset_Appearance` | `0x00` | — | Reset your cosmetics to their saved state |
+| `Randomize_Appearance` | `0x00` | — | Randomize your current cosmetics |
+| `Complete_Tasks` | `0x00` | — | Instantly complete all your tasks |
+| `Toggle_Sicko` | `0x13` (19) | PAUSE | Panic Mode — hides the overlay quickly |
+| `Leave_Game` | `0x00` | — | Leave the current lobby or game |
+| `Cancel_Start` | `0x00` | — | Cancel the game start countdown (host only) |
+
+## Common virtual key code reference
+
+The following codes cover the keys most commonly used as SickoMenu hotkeys. Values are shown in both hex and decimal for convenience.
+
+| Key | Hex | Decimal |
+|---|---|---|
+| DEL | `0x2E` | 46 |
+| INS | `0x2D` | 45 |
+| HOME | `0x24` | 36 |
+| END | `0x23` | 35 |
+| PG DN | `0x22` | 34 |
+| PG UP | `0x21` | 33 |
+| PAUSE | `0x13` | 19 |
+| CTRL | `0x11` | 17 |
+| F1–F12 | `0x70`–`0x7B` | 112–123 |
+| A–Z | `0x41`–`0x5A` | 65–90 |
+| 0–9 | `0x30`–`0x39` | 48–57 |
+
+For the complete list of all Windows virtual key codes, refer to the official Microsoft documentation:
+[Virtual-Key Codes — Microsoft Learn](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes)
+
+<Tip>
+If you want hotkeys to remain active while typing in the chat box, enable **Allow Activating Keybinds while Chatting** in **Settings → General**. By default, all binds (except `Toggle_Menu`) are suppressed when the chat input has focus to prevent accidental triggering.
+</Tip>
+
+<Note>
+A value of `0x00` (decimal `0`) means the keybind is unassigned. The corresponding action will show `NONE` in the keybinds list and can only be triggered by clicking its toggle inside the SickoMenu overlay — it will not respond to any key press.
+</Note>

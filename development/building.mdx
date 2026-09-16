@@ -1,0 +1,123 @@
+---
+title: "Building SickoMenu from Source with Visual Studio"
+sidebarTitle: "Building"
+description: "How to compile SickoMenu.dll and version.dll from source using Visual Studio 2022 and MSVC v143 on Windows, targeting x86 or x64."
+---
+
+SickoMenu is compiled with **Visual Studio 2022** using the **MSVC v143 toolset**, targeting either **x86** (Steam / itch.io) or **x64** (Epic Games / Xbox / Microsoft Store). Each platform combination produces two DLLs: `SickoMenu.dll` (manual injection) and `version.dll` (version proxy, loaded automatically by the game when placed in its directory).
+
+## Prerequisites
+
+Before opening the project, make sure you have the following installed:
+
+- **Visual Studio 2022** — Community, Professional, or Enterprise edition
+- **Desktop development with C++ workload** — required for MSVC headers and the linker
+- **MSVC v143 toolset** — the project's `.vcxproj` explicitly sets `<PlatformToolset>v143</PlatformToolset>` for all configurations
+- **Windows SDK** — the project targets `WindowsTargetPlatformVersion 10.0`; any recent Windows 10/11 SDK will work
+
+## Build Configurations
+
+The Visual Studio solution exposes four primary configurations and a matching set of `_Version` variants for the proxy DLL. The table below covers the combinations used in CI:
+
+| Configuration | Platform | Output directory | Output DLL | Description |
+|---|---|---|---|---|
+| `Release` | `x86` | `Release\` | `SickoMenu.dll` | Full optimisation (`/O2`), no debug info, whole-program optimisation; for Steam / itch.io |
+| `Release` | `x64` | `x64\Release\` | `SickoMenu.dll` | Same optimisation flags; for Epic Games / Xbox / Microsoft Store |
+| `Debug` | `x86` | `Debug\` | `SickoMenu.dll` | Full debug info (`/Zi`), no optimisation, runtime checks; for Steam / itch.io |
+| `Debug` | `x64` | `x64\Debug\` | `SickoMenu.dll` | Full debug info, no optimisation; for Epic Games / Xbox / Microsoft Store |
+
+To build the version proxy, select the corresponding `Release_Version` or `Debug_Version` configuration. The project's `<TargetName>version</TargetName>` property and `framework/version.def` module-definition file handle the DLL renaming and export forwarding automatically.
+
+## Build Steps
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/g0aty/SickoMenu.git
+    cd SickoMenu
+    ```
+  </Step>
+
+  <Step title="Open the solution in Visual Studio 2022">
+    Double-click `SickoMenu.sln`, or launch Visual Studio and choose **File → Open → Project/Solution**.
+  </Step>
+
+  <Step title="Select a configuration and platform">
+    In the toolbar drop-downs, pick your desired combination — for example **Release** / **x86** for a Steam-compatible optimised build. Use **x64** for Epic Games, Xbox App, or Microsoft Store.
+  </Step>
+
+  <Step title="Build the main DLL">
+    Go to **Build → Build Solution** (`Ctrl+Shift+B`).
+
+    From the command line with MSBuild:
+    ```bash
+    MSBuild.exe -property:Configuration=Release -property:PlatformToolset=v143 -property:Platform=x86
+    ```
+
+    The compiled `SickoMenu.dll` will appear in the output directory matching your chosen configuration (e.g. `Release\SickoMenu.dll`).
+  </Step>
+
+  <Step title="Build the version proxy DLL">
+    Switch to the **Release_Version** configuration (keeping the same platform), then build again:
+    ```bash
+    MSBuild.exe -property:Configuration=Release_Version -property:PlatformToolset=v143 -property:Platform=x86
+    ```
+
+    This produces `version.dll` in `Release_Version\` (or `x64\Release_Version\` for x64). Drop it into your Among Us directory to have the game load the mod automatically without a separate injector.
+  </Step>
+
+  <Step title="Locate the output DLLs">
+    | Configuration | Platform | SickoMenu.dll path | version.dll path |
+    |---|---|---|---|
+    | Release | x86 | `Release\SickoMenu.dll` | `Release_Version\version.dll` |
+    | Release | x64 | `x64\Release\SickoMenu.dll` | `x64\Release_Version\version.dll` |
+    | Debug | x86 | `Debug\SickoMenu.dll` | `Debug_Version\version.dll` |
+    | Debug | x64 | `x64\Debug\SickoMenu.dll` | `x64\Debug_Version\version.dll` |
+  </Step>
+</Steps>
+
+## CI Build
+
+SickoMenu uses a GitHub Actions workflow (`.github/workflows/build.yml`) that builds **all four** matrix combinations automatically. The workflow runs on a **`windows-2025`** runner and uses the `microsoft/setup-msbuild` action to put MSBuild on the PATH.
+
+Matrix entries built on every workflow run:
+
+| Matrix name | Platform | Configuration |
+|---|---|---|
+| `Release_x86_SteamItch` | x86 | Release |
+| `Release_x64_EpicXboxMS` | x64 | Release |
+| `Debug_x86_SteamItch` | x86 | Debug |
+| `Debug_x64_EpicXboxMS` | x64 | Debug |
+
+Each job:
+1. Builds `SickoMenu.dll` with the `Release` (or `Debug`) configuration
+2. Builds `version.dll` with the corresponding `Release_Version` (or `Debug_Version`) configuration
+3. Packages both DLLs together with `LICENSE` into a `.zip` artifact
+4. Uploads the artifact via `actions/upload-artifact`
+
+On published GitHub releases, a downstream `AutoRelease` job downloads all four artifacts and attaches the `.zip` files to the release using `softprops/action-gh-release`.
+
+## Updating for a New Among Us Version
+
+When Among Us ships an update its IL2CPP metadata changes, which means the generated bindings in the `appdata/` directory become stale. To regenerate them (FAQ Q11):
+
+1. Obtain the new `GameAssembly.dll` and `global-metadata.dat` from your updated Among Us installation.
+2. Open [Il2CppInspectorRedux](https://github.com/LukeFZ/Il2CppInspectorRedux) and drag-and-drop both files onto it.
+3. Generate **C++ scaffolding** output.
+4. Replace the files in the `appdata/` directory of the SickoMenu repository with the freshly generated versions:
+   - `appdata/il2cpp-classes.h`
+   - `appdata/il2cpp-functions.h`
+   - `appdata/il2cpp-functions.cpp`
+   - `appdata/il2cpp-types.h`
+   - `appdata/il2cpp-api-functions.h`
+5. Fixup any defines or naming conventions to match those expected by SickoMenu's source.
+6. Rebuild.
+
+<Note>
+  A step-by-step compilation walkthrough with screenshots is available in the community-maintained Google Docs guide linked from the README:
+  [SickoMenu Compilation Guide](https://docs.google.com/document/d/1bdXyasr7suassff_or3ywPyItGkjhlTfbBJtvaJ6udQ)
+</Note>
+
+<Warning>
+  **Debug builds open a console window** at runtime and include full symbol information. This makes them significantly easier to detect with anti-cheat tooling or manual inspection. Always distribute and use **Release** builds outside of active development and debugging sessions.
+</Warning>
